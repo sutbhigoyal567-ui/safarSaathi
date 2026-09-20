@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafarSaathi — Discover. Plan. Prevent & Protect. Explore. Remember.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF7ED;
+  --paper:#FFFFFF;
+  --ink:#231A14;
+  --ink-soft:#5C4F45;
+  --saffron:#E8590C;
+  --saffron-deep:#B9450A;
+  --marigold:#F2A72E;
+  --teal:#0F3D3E;
+  --teal-soft:#1B5E5B;
+  --maroon:#8B2635;
+  --gold:#B8860B;
+  --green:#2E7D46;
+  --line:#EBDFD3;
+  --shadow: 0 8px 24px rgba(35,26,20,0.08);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Fraunces',serif; margin:0; color:var(--ink);}
+p{margin:0;}
+button{font-family:inherit; cursor:pointer;}
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; display:block;}
+::selection{background:var(--marigold); color:var(--ink);}
+
+/* ---------- Utility ---------- */
+.hidden{display:none !important;}
+.container{max-width:1280px; margin:0 auto; padding:0 24px;}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 20px; border-radius:10px; border:none; font-weight:700; font-size:14.5px;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--saffron); color:#fff;}
+.btn-primary:hover{background:var(--saffron-deep);}
+.btn-outline{background:transparent; border:1.5px solid var(--ink); color:var(--ink);}
+.btn-outline:hover{background:var(--ink); color:#fff;}
+.btn-teal{background:var(--teal); color:#fff;}
+.btn-teal:hover{background:var(--teal-soft);}
+.btn-ghost{background:rgba(35,26,20,0.06); color:var(--ink);}
+.btn-ghost:hover{background:rgba(35,26,20,0.12);}
+.btn-danger{background:var(--maroon); color:#fff;}
+.btn-sm{padding:7px 13px; font-size:13px; border-radius:8px;}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+.pill{display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:99px; font-size:12px; font-weight:700;}
+.pill-green{background:#E4F3E8; color:var(--green);}
+.pill-gold{background:#FBF0D6; color:var(--gold);}
+.pill-red{background:#FBE6E6; color:var(--maroon);}
+.pill-teal{background:#E3EEED; color:var(--teal);}
+.card{background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line);}
+.grid{display:grid; gap:20px;}
+.g-3{grid-template-columns:repeat(3,1fr);}
+.g-4{grid-template-columns:repeat(4,1fr);}
+.g-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:1000px){.g-3,.g-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.g-2,.g-3,.g-4{grid-template-columns:1fr;}}
+.badge-verified{display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:800; color:var(--green); background:#E4F3E8; padding:3px 9px; border-radius:99px;}
+.badge-rec{display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:800; color:var(--saffron-deep); background:#FDEBE0; padding:3px 9px; border-radius:99px;}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
+.field label{font-size:13px; font-weight:700; color:var(--ink-soft);}
+.field input, .field select, .field textarea{
+  padding:10px 12px; border-radius:9px; border:1.5px solid var(--line); font-family:inherit; font-size:14.5px; background:#fff; color:var(--ink);
+}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--saffron); outline-offset:1px; border-color:var(--saffron);}
+.toast-wrap{position:fixed; top:18px; right:18px; z-index:9999; display:flex; flex-direction:column; gap:10px;}
+.toast{background:var(--ink); color:#fff; padding:13px 18px; border-radius:10px; font-size:14px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,.25); animation:slideIn .25s ease; max-width:320px;}
+.toast.success{background:var(--green);}
+.toast.error{background:var(--maroon);}
+@keyframes slideIn{from{transform:translateX(30px); opacity:0;} to{transform:translateX(0); opacity:1;}}
+.modal-overlay{position:fixed; inset:0; background:rgba(20,14,10,.55); display:flex; align-items:center; justify-content:center; z-index:1000; padding:20px; animation:fadeIn .15s ease;}
+@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+.modal{background:#fff; border-radius:16px; max-width:720px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.35);}
+.modal-header{display:flex; justify-content:space-between; align-items:flex-start; padding:20px 24px; border-bottom:1px solid var(--line); position:sticky; top:0; background:#fff; z-index:2;}
+.modal-close{background:none; border:none; font-size:22px; color:var(--ink-soft); line-height:1;}
+.modal-body{padding:24px;}
+.tabbar{display:flex; gap:6px; border-bottom:2px solid var(--line); margin-bottom:20px; overflow-x:auto;}
+.tabbar button{background:none; border:none; padding:11px 16px; font-weight:700; font-size:14px; color:var(--ink-soft); border-bottom:3px solid transparent; white-space:nowrap;}
+.tabbar button.active{color:var(--saffron-deep); border-bottom-color:var(--saffron);}
+.empty-state{text-align:center; padding:50px 20px; color:var(--ink-soft);}
+.empty-state h3{margin-bottom:8px; color:var(--ink);}
+::-webkit-scrollbar{width:9px; height:9px;}
+::-webkit-scrollbar-thumb{background:#DCCBB8; border-radius:6px;}
+
+/* ---------- Landing / Auth ---------- */
+#view-landing{min-height:100vh; display:flex; flex-direction:column;}
+.landing-hero{
+  background:linear-gradient(135deg, var(--teal) 0%, #0A2C2D 60%, #071E1F 100%);
+  color:#fff; padding:70px 24px 90px; position:relative; overflow:hidden;
+}
+.landing-hero::after{
+  content:""; position:absolute; right:-80px; top:-80px; width:400px; height:400px;
+  background:radial-gradient(circle, rgba(232,89,12,.35), transparent 70%); border-radius:50%;
+}
+.landing-nav{display:flex; justify-content:space-between; align-items:center; max-width:1280px; margin:0 auto 60px; position:relative; z-index:2;}
+.logo{font-family:'Fraunces',serif; font-weight:700; font-size:23px; color:#fff; display:flex; align-items:center; gap:8px;}
+.logo span{color:var(--marigold);}
+.hero-inner{max-width:1280px; margin:0 auto; position:relative; z-index:2;}
+.hero-inner h1{font-size:52px; line-height:1.08; max-width:680px; color:#fff; font-weight:700;}
+.hero-inner .accent{color:var(--marigold); font-style:italic; font-weight:500;}
+.hero-inner p.sub{margin-top:20px; font-size:17px; color:#D8E8E6; max-width:560px; line-height:1.6;}
+.hero-tagline{margin-top:28px; font-size:14px; letter-spacing:.3px; color:var(--marigold); font-weight:700;}
+.role-select{max-width:1280px; margin:-56px auto 0; padding:0 24px 70px; position:relative; z-index:3;}
+.role-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+@media(max-width:900px){.role-cards{grid-template-columns:1fr;}}
+.role-card{background:#fff; border-radius:18px; padding:28px; box-shadow:0 20px 50px rgba(15,61,62,.18); border:1px solid var(--line); cursor:pointer; transition:transform .15s ease;}
+.role-card:hover{transform:translateY(-4px);}
+.role-card .icon{width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:16px;}
+.role-card h3{font-size:20px; margin-bottom:8px;}
+.role-card p{color:var(--ink-soft); font-size:14px; line-height:1.55; margin-bottom:16px;}
+.landing-strip{background:var(--paper); padding:50px 24px;}
+.strip-stats{display:flex; justify-content:space-around; max-width:1000px; margin:0 auto; flex-wrap:wrap; gap:30px; text-align:center;}
+.strip-stats div b{font-family:'Fraunces',serif; font-size:32px; color:var(--saffron-deep); display:block;}
+.strip-stats div span{font-size:13px; color:var(--ink-soft); font-weight:600;}
+
+#auth-modal .modal{max-width:420px;}
+.auth-toggle{display:flex; background:#F3EAE0; border-radius:10px; padding:4px; margin-bottom:18px;}
+.auth-toggle button{flex:1; padding:9px; border:none; background:none; border-radius:7px; font-weight:700; font-size:13.5px; color:var(--ink-soft);}
+.auth-toggle button.active{background:#fff; color:var(--ink); box-shadow:0 2px 6px rgba(0,0,0,.08);}
+
+/* ---------- App Shell ---------- */
+#app-shell{display:none; min-height:100vh;}
+#app-shell.active{display:flex;}
+.sidebar{
+  width:250px; background:var(--teal); color:#fff; min-height:100vh; padding:22px 16px; position:sticky; top:0; align-self:flex-start;
+  display:flex; flex-direction:column; gap:4px;
+}
+.sidebar .logo{margin-bottom:26px; padding:0 8px;}
+.side-role{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--marigold); font-weight:800; padding:0 8px 14px;}
+.side-link{display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:9px; color:#CFE3E1; font-weight:600; font-size:14px;}
+.logout-btn{
+  background:var(--saffron);
+  color:#fff;
+}
+
+.logout-btn:hover{
+  background:var(--saffron-deep);
+  color:#fff;
+}
+.side-link:hover{background:rgba(255,255,255,.08); color:#fff;}
+.side-link.active{background:var(--saffron); color:#fff;}
+.side-link .ic{width:19px; text-align:center;}
+.sidebar-foot{margin-top:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,.14);}
+.main-col{flex:1; min-width:0;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; padding:16px 28px; background:#fff; border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:50;
+}
+.topbar .search-box{display:flex; align-items:center; gap:8px; background:#F5EEE5; border-radius:10px; padding:9px 14px; width:340px; max-width:40vw;}
+.topbar .search-box input{border:none; background:none; outline:none; font-size:14px; width:100%; font-family:inherit;}
+.topbar-right{display:flex; align-items:center; gap:16px;}
+.icon-btn{position:relative; width:38px; height:38px; border-radius:9px; background:#F5EEE5; border:none; display:flex; align-items:center; justify-content:center; font-size:17px;}
+.icon-btn .dot{position:absolute; top:5px; right:6px; width:8px; height:8px; background:var(--maroon); border-radius:50%; border:1.5px solid #fff;}
+.avatar{width:38px; height:38px; border-radius:50%; background:var(--saffron); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;}
+.page{padding:26px 28px 60px;}
+.page-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; flex-wrap:wrap; gap:12px;}
+.page-head h2{font-size:26px;}
+.page-head p.desc{color:var(--ink-soft); font-size:14px; margin-top:4px;}
+
+/* ---------- Destination Cards ---------- */
+.dest-card{overflow:hidden; cursor:pointer;}
+.dest-card .img{height:160px; background-size:cover; background-position:center; position:relative;}
+.dest-card .img .tag{position:absolute; top:10px; left:10px; background:rgba(255,255,255,.92); font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; color:var(--teal);}
+.dest-card .img .rating{position:absolute; bottom:10px; right:10px; background:rgba(20,14,10,.75); color:#fff; font-size:12px; font-weight:700; padding:3px 8px; border-radius:99px;}
+.dest-card .body{padding:14px 16px;}
+.dest-card .body h4{font-size:16px; margin-bottom:4px;}
+.dest-card .body .loc{font-size:12.5px; color:var(--ink-soft); margin-bottom:8px;}
+.dest-card .body .foot{display:flex; justify-content:space-between; align-items:center; font-size:13px;}
+.dest-card .body .price{font-weight:800; color:var(--saffron-deep);}
+.save-btn{background:none; border:none; font-size:18px; position:absolute; top:10px; right:10px; background:rgba(255,255,255,.9); width:30px; height:30px; border-radius:50%;}
+
+.filter-bar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px;}
+.filter-bar select, .filter-bar input{padding:9px 12px; border-radius:9px; border:1.5px solid var(--line); font-family:inherit; font-size:13.5px; background:#fff;}
+
+/* Destination Detail */
+.dest-hero-img{height:260px; background-size:cover; background-position:center; border-radius:12px 12px 0 0;}
+.tour360{height:220px; border-radius:12px; overflow:hidden; position:relative; background:#111; display:flex; align-items:center; justify-content:center; margin:14px 0;}
+.tour360 img{width:100%; height:100%; object-fit:cover; transition:transform .05s linear;}
+.tour360 .hint{position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.55); color:#fff; font-size:12px; padding:5px 12px; border-radius:99px;}
+.info-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:16px 0;}
+.info-chip{background:#F8F1E8; padding:10px 12px; border-radius:10px; font-size:13px;}
+.info-chip b{display:block; font-size:12px; color:var(--ink-soft); font-weight:700; margin-bottom:2px;}
+
+/* Itinerary */
+.itin-day{border:1.5px solid var(--line); border-radius:12px; padding:16px; margin-bottom:14px;}
+.itin-day-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.itin-item{display:flex; align-items:center; gap:12px; padding:10px; border-radius:9px; background:#FAF5EE; margin-bottom:8px;}
+.itin-item .time{font-weight:800; font-size:13px; color:var(--saffron-deep); width:66px; flex-shrink:0;}
+.itin-item .info{flex:1;}
+.itin-item .info b{font-size:14px;}
+.itin-item .info span{font-size:12px; color:var(--ink-soft);}
+.itin-item .actions{display:flex; gap:6px;}
+.itin-item .actions button{background:none; border:none; font-size:15px; color:var(--ink-soft); padding:4px;}
+
+/* Transport compare */
+.transport-row{display:flex; align-items:center; gap:16px; padding:14px; border:1.5px solid var(--line); border-radius:12px; margin-bottom:10px;}
+.transport-row.best{border-color:var(--green); background:#F3FAF4;}
+.transport-row .ic{font-size:24px; width:44px; text-align:center;}
+.transport-row .mid{flex:1;}
+.transport-row .stats{display:flex; gap:18px; font-size:13px; color:var(--ink-soft);}
+.transport-row .stats b{color:var(--ink); display:block; font-size:14px;}
+
+/* Diary */
+.diary-trip{margin-bottom:26px;}
+.diary-photos{display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; margin-top:10px;}
+.diary-photos img{width:100%; height:100px; object-fit:cover; border-radius:8px;}
+.upload-drop{border:2px dashed var(--line); border-radius:10px; padding:20px; text-align:center; color:var(--ink-soft); font-size:13px; cursor:pointer;}
+.upload-drop:hover{border-color:var(--saffron);}
+
+/* Safety */
+.safety-grid{display:grid; grid-template-columns:2fr 1fr; gap:20px;}
+@media(max-width:900px){.safety-grid{grid-template-columns:1fr;}}
+.sos-btn{width:100%; padding:22px; background:var(--maroon); color:#fff; border:none; border-radius:14px; font-size:18px; font-weight:800; box-shadow:0 10px 26px rgba(139,38,53,.35);}
+.contact-row{display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--line);}
+.log-row{display:flex; gap:10px; font-size:13px; padding:8px 0; border-bottom:1px solid var(--line);}
+.log-row .t{color:var(--ink-soft); width:70px; flex-shrink:0;}
+.battery-bar{height:8px; background:#EEE2D2; border-radius:99px; overflow:hidden; margin-top:6px;}
+.battery-bar div{height:100%; background:var(--green);}
+
+/* Reports / complaints */
+.report-row{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border:1.5px solid var(--line); border-radius:12px; margin-bottom:10px; gap:12px; flex-wrap:wrap;}
+.status-tag{font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:99px;}
+.status-Submitted{background:#FDEBE0; color:var(--saffron-deep);}
+.status-Under_Review{background:#FBF0D6; color:var(--gold);}
+.status-Resolved{background:#E4F3E8; color:var(--green);}
+.status-Escalated{background:#FBE6E6; color:var(--maroon);}
+
+/* Vendor */
+.stat-card{padding:20px;}
+.stat-card .num{font-family:'Fraunces',serif; font-size:30px; font-weight:700;}
+.stat-card .lbl{font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-top:4px;}
+.stat-card .delta{font-size:12px; font-weight:800; margin-top:6px;}
+.delta.up{color:var(--green);}
+.delta.down{color:var(--maroon);}
+.mini-bar-chart{display:flex; align-items:flex-end; gap:6px; height:130px; margin-top:10px;}
+.mini-bar-chart .bar{flex:1; background:linear-gradient(to top, var(--saffron), var(--marigold)); border-radius:5px 5px 0 0; position:relative;}
+.mini-bar-chart .bar span{position:absolute; bottom:-20px; left:0; right:0; text-align:center; font-size:10.5px; color:var(--ink-soft);}
+.svg-line-wrap{width:100%; overflow:visible;}
+.trust-ring{position:relative; width:110px; height:110px;}
+.trust-ring svg{transform:rotate(-90deg);}
+.trust-ring .val{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:26px; font-weight:700;}
+.review-row{padding:14px 0; border-bottom:1px solid var(--line);}
+.review-row .stars{color:var(--gold); font-size:13px;}
+.service-row{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border:1.5px solid var(--line); border-radius:11px; margin-bottom:9px;}
+
+/* Authority */
+.heat-table{width:100%; border-collapse:collapse;}
+.heat-table th{text-align:left; font-size:12px; color:var(--ink-soft); padding:8px 10px; border-bottom:2px solid var(--line);}
+.heat-table td{padding:10px 10px; border-bottom:1px solid var(--line); font-size:13.5px;}
+.heat-bar{height:9px; border-radius:99px; background:linear-gradient(90deg, var(--marigold), var(--maroon)); }
+.heat-cell-bg{border-radius:8px; padding:14px; text-align:center; color:#fff; font-weight:700; font-size:13px;}
+.case-detail-row{display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13.5px;}
+.case-detail-row b{width:130px; flex-shrink:0; color:var(--ink-soft); font-weight:700;}
+
+@media(max-width:860px){
+  .sidebar{position:fixed; left:-260px; z-index:200; transition:left .2s ease; box-shadow:0 0 40px rgba(0,0,0,.3);}
+  .sidebar.open{left:0;}
+  #app-shell.active{display:block;}
+  .main-col{width:100%;}
+  .hero-inner h1{font-size:36px;}
+  .topbar .search-box{width:auto; flex:1; margin:0 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= TOAST ================= -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ================= LANDING ================= -->
+<div id="view-landing">
+  <div class="landing-hero">
+    <nav class="landing-nav">
+      <div class="logo">SafarSaathi</div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-ghost" style="background:rgba(255,255,255,.12); color:#fff;" onclick="openAuth('login')">Log in</button>
+        <button class="btn btn-primary" onclick="openAuth('signup')">Get started</button>
+      </div>
+    </nav>
+    <div class="hero-inner">
+      <h1>Discover more. <span class="accent">Plan smarter.</span><br>Experience better. Stay safer.</h1>
+      <p class="sub">SafarSaathi connects tourists, tourism businesses and tourism authorities across India into one trusted, intelligent travel ecosystem — from your first search to the memory you keep forever.</p>
+      <div class="hero-tagline">✦ DISCOVER · PLAN · PREVENT & PROTECT · EXPLORE · REMEMBER ✦</div>
+    </div>
+  </div>
+
+  <div class="role-select">
+    <div class="role-cards">
+      <div class="role-card" onclick="openAuth('signup','tourist')">
+        <div class="icon" style="background:#FDEBE0;">🧳</div>
+        <h3>I'm a Tourist</h3>
+        <p>Explore destinations across India, build day-wise itineraries, book local experiences, keep a travel diary and stay protected with SafarShield.</p>
+        <button class="btn btn-primary btn-sm">Continue as Tourist →</button>
+      </div>
+      <div class="role-card" onclick="openAuth('signup','vendor')">
+        <div class="icon" style="background:#E3EEED;">🏨</div>
+        <h3>I'm a Business / Vendor</h3>
+        <p>Showcase your hotel, café, guiding or event service, manage bookings and enquiries, and grow your Trust Score with SafarSaathi.</p>
+        <button class="btn btn-teal btn-sm">Continue as Vendor →</button>
+      </div>
+      <div class="role-card" onclick="openAuth('signup','authority')">
+        <div class="icon" style="background:#FBF0D6;">🛡️</div>
+        <h3>I'm a Tourism Authority</h3>
+        <p>Monitor footfall, tourism trends, scam patterns and complaint hotspots across states, and act on real tourist reports.</p>
+        <button class="btn btn-outline btn-sm">Continue as Authority →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="landing-strip">
+    <div class="strip-stats">
+      <div><b>28+</b><span>States &amp; UTs covered</span></div>
+      <div><b>500+</b><span>Verified local businesses</span></div>
+      <div><b>12k+</b><span>Itineraries planned</span></div>
+      <div><b>98%</b><span>Scam reports resolved</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= AUTH MODAL ================= -->
+<div class="modal-overlay hidden" id="auth-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="authTitle">Welcome to SafarSaathi</h3>
+      <button class="modal-close" onclick="closeAuth()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-toggle">
+        <button id="tabLogin" onclick="setAuthMode('login')">Log in</button>
+        <button id="tabSignup" onclick="setAuthMode('signup')">Sign up</button>
+      </div>
+      <div class="field">
+        <label>I am a</label>
+        <select id="authRole">
+          <option value="tourist">Tourist</option>
+          <option value="vendor">Vendor / Business</option>
+          <option value="authority">Tourism Authority</option>
+        </select>
+      </div>
+      <div class="field" id="nameField">
+        <label>Full name</label>
+        <input type="text" id="authName" placeholder="e.g. Ananya Sharma">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="authPassword" placeholder="••••••••">
+      </div>
+      <div id="authError" style="color:var(--maroon); font-size:13px; margin-bottom:10px; display:none;"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="submitAuth()">Continue</button>
+      <p style="text-align:center; font-size:12px; color:var(--ink-soft); margin-top:12px;">Demo mode — no real account needed. Any email/password works.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div id="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">SafarSaathi</span></div>
+    <div class="side-role" id="sideRoleLabel">TOURIST</div>
+    <nav id="sideNav"></nav>
+    <div class="sidebar-foot">
+      <button class="side-link logout-btn" onclick="logout()"><span class="ic">↩</span> Log out</button>
+    </div>
+  </aside>
+  <div class="main-col">
+    <div class="topbar">
+      <button class="icon-btn hidden" id="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="search-box">
+        <span>🔎</span>
+        <input type="text" id="globalSearch" placeholder="Search destinations, vendors, cities...">
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="goPage('notifications')">🔔<span class="dot" id="notifDot"></span></button>
+        <button class="icon-btn" onclick="goPage('favorites')">❤️</button>
+        <div class="avatar" id="topAvatar">A</div>
+      </div>
+    </div>
+    <div class="page" id="pageRoot"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   SafarSaathi — App Logic
+   ============================================================ */
+
+/* ---------- Storage helpers ---------- */
+const DB_KEY = 'safarsaathi_db_v1';
+function loadDB(){
+  let raw = localStorage.getItem(DB_KEY);
+  if(raw){ try{ return JSON.parse(raw); }catch(e){} }
+  return null;
+}
+function saveDB(){ localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
+function uid(prefix){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
+function inr(n){ return '₹'+Number(n).toLocaleString('en-IN'); }
+function fmtDate(d){ return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
+function fmtTime(d){ return new Date(d).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}); }
+
+function toast(msg, type){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast '+(type||'');
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity=0; setTimeout(()=>el.remove(),300); }, 2600);
+}
+
+/* ---------- Seed Mock Data ---------- */
+const IMG = (seed,w,h)=> `https://picsum.photos/seed/${seed}/${w||600}/${h||400}`;
+
+const DESTINATIONS = [
+  {id:'d1', name:'Amber Fort', state:'Rajasthan', city:'Jaipur', category:'Monument', price:550, rating:4.7, img:'images/Amber fort.jpg',
+   desc:'A majestic hilltop fort of honey-coloured sandstone, overlooking Maota Lake, famed for its mirrored Sheesh Mahal and elephant rides up the ramparts.',
+   timings:'8:00 AM – 5:30 PM', funfact:'The fort\'s Sheesh Mahal can illuminate an entire room from the light of a single candle, reflected across thousands of mirror fragments.',
+   scams:['Unofficial guides charging 5x government rates','Elephant ride touts demanding upfront cash outside the ticket counter'],
+   dos:['Book e-tickets online to skip queues','Hire only ASI-badged guides from the counter'],
+   donts:['Don\'t pay guides before the tour ends','Don\'t feed the resident monkeys']},
+  {id:'d2', name:'Hawa Mahal', state:'Rajasthan', city:'Jaipur', category:'Monument', price:200, rating:4.5, img:'images/Hawa Mahal.jpg',
+   desc:'The "Palace of Winds" — a pink sandstone facade of 953 small windows, built so royal women could observe street life unseen.',
+   timings:'9:00 AM – 4:30 PM', funfact:'Hawa Mahal has no main entrance from the front — it is entered through the City Palace behind it.',
+   scams:['Photographers demanding fees after taking your photo'], dos:['Visit early morning for the best light and fewer crowds'],
+   donts:['Don\'t engage unofficial photographers']},
+  {id:'d3', name:'Taj Mahal', state:'Uttar Pradesh', city:'Agra', category:'Monument', price:1100, rating:4.9, img:'images/Taj Mahal.jpg',
+   desc:'An ivory-white marble mausoleum on the Yamuna\'s bank, built by Shah Jahan in memory of Mumtaz Mahal — one of the world\'s most recognisable monuments.',
+   timings:'Sunrise – Sunset (closed Fridays)', funfact:'The marble changes colour through the day — pinkish at dawn, milky white by day, golden under moonlight.',
+   scams:['Taxi drivers claiming the Taj is "closed" to redirect you to shops','Fake "special entry" tickets sold outside gates'],
+   dos:['Buy tickets only from the official ASI counter or website','Go at sunrise for cooler weather and softer light'],
+   donts:['Don\'t buy tickets from street touts','Don\'t bring food, tripods or drones']},
+  {id:'d4', name:'Backwaters of Alleppey', state:'Kerala', city:'Alappuzha', category:'Nature', price:3500, rating:4.8, img:'images/Backwaters of Alleppey.jpg',
+   desc:'A network of tranquil canals, lagoons and lakes lined with coconut palms, best explored on a traditional houseboat (kettuvallam).',
+   timings:'Full day cruises, 9 AM start', funfact:'Alleppey\'s backwaters span over 900 km of interconnected waterways.',
+   scams:['Unlicensed houseboats without safety gear','Inflated "AC surcharge" demanded mid-cruise'],
+   dos:['Book houseboats with visible registration','Confirm the full inclusions in writing beforehand'],
+   donts:['Don\'t pay the full amount before boarding']},
+  {id:'d5', name:'Munnar Tea Gardens', state:'Kerala', city:'Munnar', category:'Nature', price:150, rating:4.7, img:'images/Munnar Tea Gardens.jpg',
+   desc:'Rolling emerald hills carpeted with tea estates, misty valleys and the rare Neelakurinji flower that blooms once every 12 years.',
+   timings:'7:00 AM – 6:00 PM', funfact:'Munnar sits at the confluence of three mountain streams — Mudrapuzha, Nallathanni and Kundala.',
+   scams:['"Free" tea-tasting tours that end in aggressive upselling'], dos:['Visit a certified tea museum for an authentic tour'],
+   donts:['Don\'t buy "estate-fresh" tea from roadside stalls at inflated prices']},
+  {id:'d6', name:'Gateway of India', state:'Maharashtra', city:'Mumbai', category:'Monument', price:0, rating:4.6, img:'images/Gateway of India.jpg',
+   desc:'A basalt arch-monument on the Mumbai waterfront, built to commemorate King George V\'s 1911 visit, now a launch point for ferries to Elephanta Caves.',
+   timings:'Open 24 hours', funfact:'It was the ceremonial exit point for the last British troops leaving India in 1948.',
+   scams:['Unofficial ferry agents overcharging for Elephanta Caves tickets'], dos:['Buy ferry tickets only from the MTDC counter'],
+   donts:['Don\'t leave belongings unattended in the crowd']},
+  {id:'d7', name:'Ajanta & Ellora Caves', state:'Maharashtra', city:'Aurangabad', category:'Heritage', price:600, rating:4.8, img:'images/Ajanta and Ellora Caves.jpg',
+   desc:'Rock-cut Buddhist, Hindu and Jain cave temples carved between the 2nd century BCE and 10th century CE, adorned with intricate sculpture and murals.',
+   timings:'9:00 AM – 5:00 PM (closed Mondays)', funfact:'The Kailasa temple at Ellora was carved top-down from a single rock, removing over 200,000 tonnes of stone.',
+   scams:['Guides charging steep unofficial rates without ASI badges'], dos:['Carry water and wear comfortable shoes — extensive walking involved'],
+   donts:['Don\'t touch or lean on the ancient murals']},
+  {id:'d8', name:'Golden Temple', state:'Punjab', city:'Amritsar', category:'Heritage', price:0, rating:4.9, img:'images/Golden Temple.jpg',
+   desc:'The holiest Gurdwara of Sikhism, its sanctum plated in gold and set amid the sacred Amrit Sarovar pool, serving free community meals to all visitors.',
+   timings:'Open 24 hours', funfact:'The temple\'s community kitchen (langar) serves free meals to over 100,000 people every day.',
+   scams:['Shoe-counter "donation" scams outside official free counters'], dos:['Cover your head and remove shoes before entering','Join the free langar respectfully'],
+   donts:['Don\'t wear leather items inside the complex']},
+  {id:'d9', name:'Pangong Lake', state:'Ladakh', city:'Leh', category:'Nature', price:0, rating:4.9, img:'images/Pangong Lake.jpg',
+   desc:'A high-altitude endorheic lake stretching into Tibet, famous for water that shifts through shades of blue depending on the light.',
+   timings:'Best visited May – September', funfact:'Only a third of the lake lies in India; the rest extends into Chinese-administered territory.',
+   scams:['Unlicensed taxis overcharging for the Chang La pass route'], dos:['Carry inner-line permits','Acclimatise in Leh for 2 days before travelling'],
+   donts:['Don\'t swim — the lake is brackish and freezing']},
+  {id:'d10', name:'Khajuraho Temples', state:'Madhya Pradesh', city:'Khajuraho', category:'Heritage', price:600, rating:4.6, img:'images/Khajuraho Temples.jpg',
+   desc:'A UNESCO World Heritage cluster of medieval Hindu and Jain temples renowned for their intricate nagara-style architecture and sculpture.',
+   timings:'8:00 AM – 6:00 PM', funfact:'Of the original 85 temples built by the Chandela dynasty, only 25 survive today.',
+   scams:['Guides quoting inflated "combo package" prices'], dos:['Hire guides from the official tourism office'],
+   donts:['Don\'t skip the light & sound show — it retells the temples\' history well']},
+  {id:'d11', name:'Mysore Palace', state:'Karnataka', city:'Mysuru', category:'Monument', price:200, rating:4.7, img:'images/Mysore Palace.jpg',
+   desc:'A resplendent Indo-Saracenic palace, seat of the Wadiyar dynasty, illuminated by nearly 100,000 bulbs every Sunday evening.',
+   timings:'10:00 AM – 5:30 PM', funfact:'The palace hosts the grand Mysuru Dasara festivities every October, with a royal elephant procession.',
+   scams:['Camera-fee touts at the gate beyond the official ticket'], dos:['Visit on a Sunday evening to see the illumination'],
+   donts:['Don\'t miss the shoe-check counter — footwear isn\'t allowed inside']},
+  {id:'d12', name:'Gokarna Beaches', state:'Karnataka', city:'Gokarna', category:'Beach', price:0, rating:4.5, img:'images/Gorkana beaches.jpg',
+   desc:'A quieter alternative to Goa — a string of pristine, cliff-backed beaches (Om, Kudle, Half Moon) linked by scenic coastal treks.',
+   timings:'Best at sunrise/sunset', funfact:'Om Beach is so named because its double-curved shoreline resembles the Hindu "Om" symbol from above.',
+   scams:['Unlicensed shacks overcharging tourists on seafood'], dos:['Confirm shack prices before ordering'],
+   donts:['Don\'t swim alone at unmarked beaches — currents can be strong']},
+  {id:'d13', name:'Kaziranga National Park', state:'Assam', city:'Golaghat', category:'Wildlife', price:1200, rating:4.8, img:'images/Kaziranga National Park.jpg',
+   desc:'Home to two-thirds of the world\'s one-horned rhinoceros population, best explored on jeep or elephant safari through tall grasslands.',
+   timings:'Nov – Apr, 6 AM & 2 PM safaris', funfact:'Kaziranga\'s rhino population has grown from under 200 in 1904 to over 2,600 today.',
+   scams:['Unregistered safari operators without park permits'], dos:['Book safaris via the official forest department counter'],
+   donts:['Don\'t make loud noises during the safari']},
+  {id:'d14', name:'Varanasi Ghats', state:'Uttar Pradesh', city:'Varanasi', category:'Heritage', price:0, rating:4.8, img:'images/Varanasi Ghats.jpg',
+   desc:'A continuous run of stone steps along the sacred Ganges, alive with dawn rituals, evening Ganga Aarti and centuries of unbroken tradition.',
+   timings:'Ganga Aarti at sunset daily', funfact:'Varanasi is considered one of the oldest continuously inhabited cities in the world.',
+   scams:['Boat operators quoting inflated per-hour rates mid-ride'], dos:['Negotiate and confirm the boat fare before boarding'],
+   donts:['Don\'t photograph cremation ceremonies at Manikarnika Ghat']},
+  {id:'d15', name:'Rann of Kutch', state:'Gujarat', city:'Kutch', category:'Nature', price:100, rating:4.7, img:'images/Rann of Kutch.jpg',
+   desc:'A vast white salt desert that hosts the annual Rann Utsav — tents, folk music and moonlit walks across a shimmering horizon.',
+   timings:'Best Nov – Feb during Rann Utsav', funfact:'The Rann floods with seawater each monsoon and dries into a blinding white salt crust by winter.',
+   scams:['Unofficial camps outside the Rann Utsav registered zone'], dos:['Book Rann Utsav tent stays via the official Gujarat Tourism site'],
+   donts:['Don\'t venture into the salt flats after dark without a guide']},
+  {id:'d16', name:'Darjeeling Toy Train', state:'West Bengal', city:'Darjeeling', category:'Heritage', price:1500, rating:4.6, img:'images/Darjeeling toy train.jpg',
+   desc:'A UNESCO-listed narrow-gauge railway winding through pine forests and tea estates up to Darjeeling, with sweeping Himalayan views.',
+   timings:'Joy rides 10:40 AM, 1:20 PM, 3:20 PM', funfact:'The line uses a zig-zag "Batasia Loop" to climb steep gradients without long tunnels.',
+   scams:['Touts reselling tickets at inflated prices when official counters show "sold out"'], dos:['Book toy-train tickets online in advance'],
+   donts:['Don\'t lean out of the windows on the loop sections']},
+  {id:'d17', name:'Hampi Ruins', state:'Karnataka', city:'Hampi', category:'Heritage', price:600, rating:4.8, img:'images/Hampi ruins.jpg',
+   desc:'The boulder-strewn ruins of the Vijayanagara Empire\'s capital — temples, market streets and a stone chariot amid surreal granite terrain.',
+   timings:'6:00 AM – 6:00 PM', funfact:'Hampi\'s stone chariot at Vittala Temple has wheels that could once actually rotate.',
+   scams:['Unofficial "monument pass" bundles sold outside ASI counters'], dos:['Rent a bicycle to cover the spread-out ruins comfortably'],
+   donts:['Don\'t climb on fragile carved structures']},
+  {id:'d18', name:'Shillong & Living Root Bridges', state:'Meghalaya', city:'Cherrapunji', category:'Nature', price:100, rating:4.7, img:'images/Living root bridge.jpg',
+   desc:'Bridges grown over centuries from the aerial roots of rubber fig trees, deep in the wettest region on Earth.',
+   timings:'Trek starts 7:00 AM', funfact:'Some living root bridges take 15–20 years to become fully functional and can last for centuries.',
+   scams:['Unlicensed local "guides" demanding cash mid-trek to continue'], dos:['Hire guides through the village eco-tourism committee'],
+   donts:['Don\'t trek alone during monsoon — trails get slippery']},
+];
+
+const CATEGORIES = ['Monument','Nature','Heritage','Beach','Wildlife'];
+const STATES = [...new Set(DESTINATIONS.map(d=>d.state))];
+
+const VENDOR_SEED = [
+  {id:'v1', name:'Rajwada Heritage Hotel', type:'Hotel', state:'Rajasthan', city:'Jaipur', trust:88, verified:true, recommended:true, img:'images/rajwada.jpg',
+   desc:'A restored haveli-style boutique hotel near the City Palace with rooftop dining and courtyard pool.', priceRange:'₹4,500 – ₹9,000/night'},
+  {id:'v2', name:'Ganga View Homestay', type:'Homestay', state:'Uttar Pradesh', city:'Varanasi', trust:74, verified:true, recommended:false, img:'images/ganga view.jpg',
+   desc:'Family-run homestay overlooking Assi Ghat with home-cooked thalis and sunrise boat arrangements.', priceRange:'₹1,800 – ₹3,200/night'},
+  {id:'v3', name:'Coco Palm Café', type:'Café', state:'Kerala', city:'Alappuzha', trust:91, verified:true, recommended:true, img:'images/coco palm.jpg',
+   desc:'Backwater-facing café serving Kerala breakfast staples, fresh seafood and filter coffee.', priceRange:'₹150 – ₹500/meal'},
+  {id:'v4', name:'Himalayan Trails Travel Co.', type:'Travel Agency', state:'Ladakh', city:'Leh', trust:82, verified:true, recommended:false, img:'images/himalayan.jpg',
+   desc:'Permit-assisted road trips and treks across Ladakh with certified high-altitude guides.', priceRange:'₹8,000 – ₹35,000/package'},
+  {id:'v5', name:'Chetan the City Guide', type:'Guide', state:'Rajasthan', city:'Jaipur', trust:95, verified:true, recommended:true, img:'images/city guide.jpg',
+   desc:'ASI-certified heritage guide, 12 years experience, specialising in Amber Fort and City Palace tours.', priceRange:'₹800 – ₹1,500/tour'},
+  {id:'v6', name:'Konkan Coastal Retreat', type:'Resort', state:'Karnataka', city:'Gokarna', trust:69, verified:false, recommended:false, img:IMG('konkanretreat'),
+   desc:'Beachfront cottages steps from Kudle Beach with an in-house seafood shack.', priceRange:'₹2,200 – ₹5,000/night'},
+  {id:'v7', name:'Lensman Photography Studio', type:'Photographer', state:'Maharashtra', city:'Mumbai', trust:86, verified:true, recommended:false,  img:IMG('lensman'),
+   desc:'Travel and heritage-walk photography packages across South Mumbai landmarks.', priceRange:'₹3,000 – ₹12,000/session'},
+  {id:'v8', name:'Kutch Craft Collective', type:'Handicraft Workshop', state:'Gujarat', city:'Kutch', trust:79, verified:true, recommended:false, img:'images/kutch craft.jpg',
+   desc:'Community-run mirror-work and block-printing workshops led by local artisans.', priceRange:'₹500 – ₹1,200/workshop'},
+];
+
+const CULTURAL_EXPERIENCES = [
+  {id:'c1', title:'Heritage Walk: Old Jaipur Bazaars', state:'Rajasthan', city:'Jaipur', price:600, duration:'2.5 hrs', img:'images/Jaipur old bazar.jpeg', vendor:'v5',
+   desc:'Wind through pink-city lanes, spice markets and gem workshops with a certified local historian.'},
+  {id:'c2', title:'Kerala Sadya Cooking Class', state:'Kerala', city:'Alleppey', price:1200, duration:'3 hrs', img:'images/Sadya.jpg', vendor:'v3',
+   desc:'Learn to prepare a traditional banana-leaf feast with a local homestay family.'},
+  {id:'c3', title:'Kutch Mirror-Work Handicraft Workshop', state:'Gujarat', city:'Kutch', price:800, duration:'2 hrs', img:'images/kutch workshop.jpg', vendor:'v8',
+   desc:'Hands-on embroidery and mirror-work session led by Rabari artisan women.'},
+  {id:'c4', title:'Rajasthani Folk Performance Evening', state:'Rajasthan', city:'Jodhpur', price:900, duration:'2 hrs', img:'images/folk rajasthan.jpg', vendor:'v1',
+   desc:'Live Kalbelia dance and Manganiyar folk music under the stars with a traditional dinner.'},
+  {id:'c5', title:'Ganga Aarti & Boat Ritual Experience', state:'Uttar Pradesh', city:'Varanasi', price:500, duration:'1.5 hrs', img:'images/ganga aarti.jpg', vendor:'v2',
+   desc:'Witness the evening Ganga Aarti from a private boat with a priest-guided explanation of the ritual.'},
+];
+
+const TRANSPORT_TEMPLATES = [
+  {mode:'Cab (Private)', icon:'🚕', speedKmh:35, perKm:14, base:60},
+  {mode:'Auto-rickshaw', icon:'🛺', speedKmh:25, perKm:9, base:30},
+  {mode:'City Bus', icon:'🚌', speedKmh:20, perKm:1.5, base:10},
+  {mode:'Metro', icon:'🚇', speedKmh:40, perKm:1.2, base:10},
+  {mode:'Walking', icon:'🚶', speedKmh:4.5, perKm:0, base:0},
+];
+
+/* ---------- DB Initialisation ---------- */
+let DB = loadDB();
+if(!DB){
+  DB = {
+    users: {},          // email -> user object
+    currentEmail: null,
+    vendors: JSON.parse(JSON.stringify(VENDOR_SEED)),
+    bookings: [],        // {id, touristEmail, touristName, vendorId, vendorName, type, item, date, amount, status, createdAt}
+    reports: [],          // scam/complaint reports
+    reviews: [],           // {id, vendorId, touristName, rating, text, date}
+    itineraries: [],        // saved itineraries per tourist
+    diaryTrips: [],          // saved diary trips per tourist
+    favorites: {},            // email -> [destId]
+    notifications: {},         // email -> [ {id,text,date,read} ]
+    trustHistory: {},           // vendorId -> [{month, score}]
+    safety: {},                  // email -> {contacts:[], logs:[], checkins:[]}
+  };
+  // seed some cross-connected demo data so dashboards never feel empty
+  DB.bookings.push(
+    {id:uid('bk'), touristEmail:'demo.tourist@example.com', touristName:'Ananya Sharma', vendorId:'v1', vendorName:'Rajwada Heritage Hotel', type:'Hotel', item:'Deluxe Room x2 nights', date:'2026-09-12', amount:9000, status:'Confirmed', createdAt:Date.now()-86400000*3},
+    {id:uid('bk'), touristEmail:'rahul.k@example.com', touristName:'Rahul Kapoor', vendorId:'v5', vendorName:'Chetan the City Guide', type:'Guide', item:'Amber Fort Half-day Tour', date:'2026-09-15', amount:1200, status:'Pending', createdAt:Date.now()-86400000},
+    {id:uid('bk'), touristEmail:'priya.n@example.com', touristName:'Priya Nair', vendorId:'v3', vendorName:'Coco Palm Café', type:'Cultural Experience', item:'Kerala Sadya Cooking Class', date:'2026-09-10', amount:1200, status:'Confirmed', createdAt:Date.now()-86400000*5},
+  );
+  DB.reviews.push(
+    {id:uid('rv'), vendorId:'v1', touristName:'Rahul Kapoor', rating:5, text:'Beautiful heritage property, staff went out of their way to help plan our Jaipur days.', date:'2026-08-20'},
+    {id:uid('rv'), vendorId:'v1', touristName:'Meera Iyer', rating:4, text:'Lovely rooftop view, breakfast could have more variety.', date:'2026-08-11'},
+    {id:uid('rv'), vendorId:'v5', touristName:'Ananya Sharma', rating:5, text:'Chetan knew details about Amber Fort no book could tell us. Highly recommend.', date:'2026-08-28'},
+    {id:uid('rv'), vendorId:'v3', touristName:'Priya Nair', rating:5, text:'Best filter coffee in Alleppey, right on the water.', date:'2026-08-15'},
+  );
+  DB.reports.push(
+    {id:uid('rp'), touristEmail:'demo.tourist@example.com', touristName:'Ananya Sharma', category:'Overcharging', location:'Amber Fort, Jaipur', description:'An unofficial guide demanded ₹2000 for a tour after quoting ₹500 verbally.', status:'Under_Review', date:'2026-08-30', evidence:false, insight:'Pattern matches 6 other reports near Amber Fort main gate in the last 30 days.'},
+    {id:uid('rp'), touristEmail:'rahul.k@example.com', touristName:'Rahul Kapoor', category:'Fake Ticket', location:'Taj Mahal, Agra', description:'Bought "special entry" tickets from a street vendor which were rejected at the gate.', status:'Escalated', date:'2026-08-25', evidence:true, insight:'High-severity: fraudulent ticketing ring suspected near East Gate.'},
+    {id:uid('rp'), touristEmail:'priya.n@example.com', touristName:'Priya Nair', category:'Unsafe Vendor', location:'Alleppey Backwaters', description:'Houseboat had no visible safety/life jackets on board.', status:'Resolved', date:'2026-08-10', evidence:false, insight:'Vendor flagged and safety audit completed by local authority.'},
+  );
+  DB.trustHistory = {
+    v1:[{m:'Apr',s:78},{m:'May',s:80},{m:'Jun',s:83},{m:'Jul',s:85},{m:'Aug',s:88}],
+    v3:[{m:'Apr',s:82},{m:'May',s:84},{m:'Jun',s:86},{m:'Jul',s:89},{m:'Aug',s:91}],
+    v5:[{m:'Apr',s:88},{m:'May',s:90},{m:'Jun',s:91},{m:'Jul',s:93},{m:'Aug',s:95}],
+  };
+  saveDB();
+}
+
+let currentUser = null; // {email,name,role}
+
+/* ---------- Auth ---------- */
+let authMode = 'signup';
+let authPresetRole = null;
+function openAuth(mode, role){
+  authMode = mode; authPresetRole = role||null;
+  document.getElementById('auth-modal').classList.remove('hidden');
+  setAuthMode(mode);
+  if(role) document.getElementById('authRole').value = role;
+}
+function closeAuth(){ document.getElementById('auth-modal').classList.add('hidden'); }
+function setAuthMode(mode){
+  authMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('tabSignup').classList.toggle('active', mode==='signup');
+  document.getElementById('nameField').style.display = mode==='signup' ? 'flex':'none';
+  document.getElementById('authTitle').textContent = mode==='signup' ? 'Create your account' : 'Welcome back';
+  document.getElementById('authError').style.display='none';
+}
+function submitAuth(){
+  const email = document.getElementById('authEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('authPassword').value;
+  const role = document.getElementById('authRole').value;
+  const name = document.getElementById('authName').value.trim();
+  const errEl = document.getElementById('authError');
+  if(!email || !pass){ errEl.textContent='Please enter an email and password.'; errEl.style.display='block'; return; }
+  if(authMode==='signup'){
+    if(!name){ errEl.textContent='Please enter your name.'; errEl.style.display='block'; return; }
+    DB.users[email] = {email, name, role, password:pass, joined:Date.now()};
+    if(role==='vendor' && !DB.vendors.find(v=>v.ownerEmail===email)){
+      DB.vendors.push({id:uid('v'), name:name+"'s Business", type:'Hotel', state:'Rajasthan', city:'Jaipur', trust:60, verified:false, recommended:false, img:IMG('newvendor'+Date.now()), desc:'New SafarSaathi partner — complete your profile to attract more bookings.', priceRange:'Set your pricing', ownerEmail:email});
+    }
+    DB.favorites[email]=[]; DB.notifications[email]=[{id:uid('n'), text:'Welcome to SafarSaathi! Complete your profile to get started.', date:Date.now(), read:false}];
+    DB.safety[email] = {contacts:[{name:'Mom',phone:'+91 98xxxxxx01'},{name:'Local Friend',phone:'+91 98xxxxxx02'}], logs:[{t:Date.now(), text:'Account created'}], checkins:[]};
+  }else{
+    if(!DB.users[email]){
+      // demo login shortcut: auto-provision so returning "demo" users always work
+      DB.users[email] = {email, name: email.split('@')[0], role, password:pass, joined:Date.now()};
+      DB.favorites[email]=DB.favorites[email]||[];
+      DB.notifications[email]=DB.notifications[email]||[];
+      DB.safety[email] = DB.safety[email]||{contacts:[], logs:[], checkins:[]};
+    }
+  }
+  DB.currentEmail = email;
+  saveDB();
+  currentUser = DB.users[email];
+  closeAuth();
+  enterApp();
+}
+function logout(){
+  DB.currentEmail = null; saveDB();
+  currentUser = null;
+  document.getElementById('app-shell').classList.remove('active');
+  document.getElementById('view-landing').style.display='flex';
+}
+
+/* ---------- App Shell / Navigation ---------- */
+const NAV = {
+  tourist: [
+    {id:'explore', icon:'🧭', label:'Explore India'},
+    {id:'planner', icon:'🗺️', label:'SafarPlanner'},
+    {id:'movesmart', icon:'🚦', label:'MoveSmart'},
+    {id:'cultural', icon:'🎭', label:'Cultural Experiences'},
+    {id:'diary', icon:'📔', label:'SafarDiary'},
+    {id:'safety', icon:'🛡️', label:'SafarShield'},
+    {id:'travel-assist', icon:'📞', label:'Travel Assist'},
+    {id:'reports', icon:'⚠️', label:'Report an Issue'},
+    {id:'bookings', icon:'📅', label:'My Bookings'},
+    {id:'favorites', icon:'❤️', label:'Favorites'},
+    {id:'alerts', icon:'🚨', label:'Alert'},
+    {id:'notifications', icon:'🔔', label:'Notifications'},
+  ],
+  vendor: [
+    {id:'v-dashboard', icon:'📊', label:'Dashboard'},
+    {id:'v-profile', icon:'🏷️', label:'Business Profile'},
+    {id:'v-services', icon:'🧾', label:'Services & Pricing'},
+    {id:'v-bookings', icon:'📅', label:'Bookings & Enquiries'},
+    {id:'v-reviews', icon:'⭐', label:'Reviews & Complaints'},
+    {id:'v-analytics', icon:'📈', label:'Analytics & Trust Score'},
+    {id:'notifications', icon:'🔔', label:'Notifications'},
+  ],
+  authority: [
+    {id:'a-overview', icon:'📊', label:'Overview'},
+    {id:'a-heatmap', icon:'🗺️', label:'Tourism Heatmap'},
+    {id:'a-reports', icon:'⚠️', label:'Reports & Cases'},
+    {id:'a-vendors', icon:'🏨', label:'Business Directory'},
+    {id:'notifications', icon:'🔔', label:'Notifications'},
+  ],
+};
+let currentPage = null;
+
+function enterApp(){
+  document.getElementById('view-landing').style.display='none';
+  document.getElementById('app-shell').classList.add('active');
+  document.getElementById('sideRoleLabel').textContent = currentUser.role.toUpperCase();
+  document.getElementById('topAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  buildSideNav();
+  const home = currentUser.role==='tourist'?'explore': currentUser.role==='vendor'?'v-dashboard':'a-overview';
+  goPage(home);
+  refreshNotifDot();
+}
+function buildSideNav(){
+  const nav = NAV[currentUser.role];
+  const el = document.getElementById('sideNav');
+  el.innerHTML = nav.map(n=>`<a class="side-link" id="nav-${n.id}" onclick="goPage('${n.id}')"><span class="ic">${n.icon}</span>${n.label}</a>`).join('');
+}
+function goPage(id){
+  currentPage = id;
+  document.querySelectorAll('.side-link').forEach(a=>a.classList.remove('active'));
+  const active = document.getElementById('nav-'+id);
+  if(active) active.classList.add('active');
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = '';
+  window.scrollTo(0,0);
+  const renderers = {
+    explore: renderExplore, planner: renderPlanner, movesmart: renderMoveSmart, cultural: renderCultural,
+    diary: renderDiary, safety: renderSafety, 'travel-assist': renderTravelAssist,
+    reports: renderReports, bookings: renderTouristBookings,
+    favorites: renderFavorites, alerts: renderAlerts, notifications: renderNotifications,
+    'v-dashboard': renderVendorDashboard, 'v-profile': renderVendorProfile, 'v-services': renderVendorServices,
+    'v-bookings': renderVendorBookings, 'v-reviews': renderVendorReviews, 'v-analytics': renderVendorAnalytics,
+    'a-overview': renderAuthorityOverview, 'a-heatmap': renderAuthorityHeatmap, 'a-reports': renderAuthorityReports,
+    'a-vendors': renderAuthorityVendors,
+  };
+  (renderers[id]||renderExplore)();
+  document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); }
+function refreshNotifDot(){
+  const n = (DB.notifications[currentUser.email]||[]).filter(x=>!x.read).length;
+  document.getElementById('notifDot').style.display = n>0 ? 'block':'none';
+}
+function notify(email, text){
+  DB.notifications[email] = DB.notifications[email]||[];
+  DB.notifications[email].unshift({id:uid('n'), text, date:Date.now(), read:false});
+  saveDB();
+}
+function myVendor(){ return DB.vendors.find(v=>v.ownerEmail===currentUser.email) || DB.vendors[0]; }
+
+/* ================= TOURIST: EXPLORE ================= */
+let exploreFilters = {state:'', city:'', category:'', q:''};
+function renderExplore(){
+  const root = document.getElementById('pageRoot');
+  const cities = [...new Set(DESTINATIONS.filter(d=>!exploreFilters.state || d.state===exploreFilters.state).map(d=>d.city))];
+  root.innerHTML = `
+    <div class="page-head">
+      <div><h2>Explore India</h2><p class="desc">Discover monuments, nature, heritage sites and more across every state.</p></div>
+    </div>
+    <div class="filter-bar">
+      <select onchange="exploreFilters.state=this.value; exploreFilters.city=''; renderExplore();">
+        <option value="">All States</option>
+        ${STATES.map(s=>`<option value="${s}" ${exploreFilters.state===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <select onchange="exploreFilters.city=this.value; renderExplore();">
+        <option value="">All Cities</option>
+        ${cities.map(c=>`<option value="${c}" ${exploreFilters.city===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+      <select onchange="exploreFilters.category=this.value; renderExplore();">
+        <option value="">All Categories</option>
+        ${CATEGORIES.map(c=>`<option value="${c}" ${exploreFilters.category===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+      <input type="text" placeholder="Search destinations..." value="${exploreFilters.q}" oninput="exploreFilters.q=this.value; renderExploreGridOnly();">
+      ${(exploreFilters.state||exploreFilters.city||exploreFilters.category||exploreFilters.q) ? `<button class="btn btn-ghost btn-sm" onclick="exploreFilters={state:'',city:'',category:'',q:''}; renderExplore();">Clear filters</button>`:''}
+    </div>
+    <div class="grid g-4" id="exploreGrid"></div>
+  `;
+  renderExploreGridOnly();
+}
+function renderExploreGridOnly(){
+  const grid = document.getElementById('exploreGrid');
+  if(!grid) return;
+  const q = exploreFilters.q.toLowerCase();
+  const list = DESTINATIONS.filter(d=>
+    (!exploreFilters.state || d.state===exploreFilters.state) &&
+    (!exploreFilters.city || d.city===exploreFilters.city) &&
+    (!exploreFilters.category || d.category===exploreFilters.category) &&
+    (!q || d.name.toLowerCase().includes(q) || d.city.toLowerCase().includes(q) || d.state.toLowerCase().includes(q))
+  );
+  if(list.length===0){ grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>No destinations match</h3><p>Try adjusting your filters or search term.</p></div>`; return; }
+  const favs = DB.favorites[currentUser.email]||[];
+  grid.innerHTML = list.map(d=>`
+    <div class="card dest-card" onclick="openDestination('${d.id}')">
+      <div class="img" style="background-image:url('${d.img}')">
+        <span class="tag">${d.category}</span>
+        <button class="save-btn" onclick="event.stopPropagation(); toggleFavorite('${d.id}')">${favs.includes(d.id)?'❤️':'🤍'}</button>
+        <span class="rating">★ ${d.rating}</span>
+      </div>
+      <div class="body">
+        <h4>${d.name}</h4>
+        <div class="loc">📍 ${d.city}, ${d.state}</div>
+        <div class="foot"><span class="price">${d.price? inr(d.price):'Free entry'}</span><span style="color:var(--ink-soft); font-size:12px;">View details →</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+function toggleFavorite(id){
+  DB.favorites[currentUser.email] = DB.favorites[currentUser.email]||[];
+  const arr = DB.favorites[currentUser.email];
+  const idx = arr.indexOf(id);
+  if(idx>-1){ arr.splice(idx,1); toast('Removed from favorites'); } else { arr.push(id); toast('Saved to favorites','success'); }
+  saveDB();
+  if(currentPage==='explore') renderExploreGridOnly();
+  if(currentPage==='favorites') renderFavorites();
+}
+
+/* ---- Destination Detail Modal with simulated 360 tour ---- */
+let tour360Angle = 0, tour360Timer=null;
+function openDestination(id){
+  const d = DESTINATIONS.find(x=>x.id===id);
+  const favs = DB.favorites[currentUser.email]||[];
+  const overlay = document.createElement('div');
+  overlay.className='modal-overlay'; overlay.id='destModal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:820px;">
+      <div class="modal-header">
+        <div><h3>${d.name}</h3><p style="font-size:13px; color:var(--ink-soft); margin-top:4px;">📍 ${d.city}, ${d.state} · ${d.category}</p></div>
+        <button class="modal-close" onclick="closeModal('destModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="dest-hero-img" style="background-image:url('${d.img}')"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+          <div class="pill pill-gold">★ ${d.rating} rating</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="toggleFavorite('${d.id}'); this.textContent = this.textContent.includes('🤍')?'❤️ Saved':'🤍 Save';">${favs.includes(d.id)?'❤️ Saved':'🤍 Save'}</button>
+            <button class="btn btn-primary btn-sm" onclick="closeModal('destModal'); addToPlannerFromDest('${d.id}')">+ Add to Planner</button>
+          </div>
+        </div>
+        <p style="margin-top:16px; line-height:1.6; color:var(--ink-soft);">${d.desc}</p>
+
+        <h4 style="margin-top:20px; font-size:15px;">360° Virtual Tour</h4>
+        <div class="tour360" id="tour360box">
+          <img id="tour360img" src="${d.img}" style="transform:scale(1.35) translateX(0px);">
+          <span class="hint">Drag to look around · simulated preview</span>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-chip"><b>Timings</b>${d.timings}</div>
+          <div class="info-chip"><b>Entry Price</b>${d.price? inr(d.price):'Free'}</div>
+        </div>
+
+        <h4 style="margin-top:16px; font-size:15px;">Fun Fact</h4>
+        <p style="color:var(--ink-soft); font-size:14px; margin-top:4px;">💡 ${d.funfact}</p>
+
+        <div class="grid g-2" style="margin-top:18px;">
+          <div>
+            <h4 style="font-size:14px; color:var(--maroon);">⚠ Common Scams</h4>
+            <ul style="margin:8px 0 0 18px; font-size:13.5px; color:var(--ink-soft); line-height:1.7;">${d.scams.map(s=>`<li>${s}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <h4 style="font-size:14px; color:var(--green);">✔ Do's & Don'ts</h4>
+            <ul style="margin:8px 0 0 18px; font-size:13.5px; color:var(--ink-soft); line-height:1.7;">
+              ${d.dos.map(s=>`<li>${s}</li>`).join('')}
+              ${d.donts.map(s=>`<li>🚫 ${s}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="bookDestination('${d.id}')">Book a Guided Visit</button>
+          <button class="btn btn-outline" onclick="closeModal('destModal'); goPage('reports'); prefillReportLocation('${d.name}, ${d.city}');">Report an issue here</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setupTour360();
+}
+function setupTour360(){
+  const box = document.getElementById('tour360box'); const img = document.getElementById('tour360img');
+  let dragging=false, startX=0, offset=0;
+  box.addEventListener('mousedown', e=>{dragging=true; startX=e.clientX;});
+  window.addEventListener('mousemove', e=>{ if(!dragging) return; const dx = e.clientX-startX; img.style.transform=`scale(1.35) translateX(${offset+dx}px)`; });
+  window.addEventListener('mouseup', e=>{ if(!dragging) return; dragging=false; offset += (e.clientX-startX); });
+  box.addEventListener('touchstart', e=>{dragging=true; startX=e.touches[0].clientX;});
+  box.addEventListener('touchmove', e=>{ if(!dragging) return; const dx=e.touches[0].clientX-startX; img.style.transform=`scale(1.35) translateX(${offset+dx}px)`; });
+  box.addEventListener('touchend', e=>{dragging=false;});
+}
+function closeModal(id){ const el=document.getElementById(id); if(el) el.remove(); }
+function bookDestination(id){
+  const d = DESTINATIONS.find(x=>x.id===id);
+  DB.bookings.push({id:uid('bk'), touristEmail:currentUser.email, touristName:currentUser.name, vendorId:'authority', vendorName:'SafarSaathi Guided Visit', type:'Guided Visit', item:d.name+' — Guided Visit', date: new Date(Date.now()+86400000*3).toISOString().slice(0,10), amount:d.price||500, status:'Confirmed', createdAt:Date.now()});
+  saveDB();
+  toast('Guided visit booked for '+d.name+'!','success');
+  closeModal('destModal');
+}
+function prefillReportLocation(loc){ setTimeout(()=>{ const el=document.getElementById('rpLocation'); if(el) el.value=loc; },50); }
+
+/* ================= TOURIST: SAFARPLANNER ================= */
+let plannerDraft = null; // {destState, days:[{day, items:[{time,title,type,cost}]}]}
+function renderPlanner(){
+  const root = document.getElementById('pageRoot');
+  const saved = DB.itineraries.filter(it=>it.email===currentUser.email);
+  root.innerHTML = `
+    <div class="page-head"><div><h2>SafarPlanner</h2><p class="desc">Generate a personalised day-wise itinerary in seconds.</p></div></div>
+    <div class="grid" style="grid-template-columns:340px 1fr; align-items:start;">
+      <div class="card" style="padding:20px;">
+        <div class="field"><label>Destination state</label><select id="pState">${STATES.map(s=>`<option>${s}</option>`).join('')}</select></div>
+        <div class="field"><label>Duration (days)</label><input type="number" id="pDays" min="1" max="7" value="3"></div>
+        <div class="field"><label>Budget (total, ₹)</label><input type="number" id="pBudget" value="15000"></div>
+        <div class="field"><label>Interests</label>
+          <select id="pInterest">
+            <option value="">Balanced mix</option>
+            ${CATEGORIES.map(c=>`<option value="${c}">${c}-focused</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Travel preference</label>
+          <select id="pPace"><option value="relaxed">Relaxed pace</option><option value="packed">Packed / see everything</option></select>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="generateItinerary()">✨ Generate Itinerary</button>
+        ${saved.length? `<h4 style="font-size:13px; margin-top:22px; color:var(--ink-soft);">SAVED ITINERARIES</h4>
+        ${saved.map(it=>`<div style="padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; display:flex; justify-content:space-between;"><span>${it.title}</span><a onclick="loadItinerary('${it.id}')" style="color:var(--saffron-deep); font-weight:700; cursor:pointer;">Open</a></div>`).join('')}` : ''}
+      </div>
+      <div id="plannerResult">
+        <div class="empty-state"><h3>No itinerary yet</h3><p>Fill in your preferences and generate a personalised plan.</p></div>
+      </div>
+    </div>
+  `;
+}
+function generateItinerary(){
+  const state = document.getElementById('pState').value;
+  const days = Math.max(1, Math.min(7, parseInt(document.getElementById('pDays').value)||3));
+  const budget = parseInt(document.getElementById('pBudget').value)||15000;
+  const interest = document.getElementById('pInterest').value;
+  const pace = document.getElementById('pPace').value;
+  let pool = DESTINATIONS.filter(d=>d.state===state);
+  if(interest) pool = pool.filter(d=>d.category===interest).concat(DESTINATIONS.filter(d=>d.state===state && d.category!==interest));
+  if(pool.length===0) pool = DESTINATIONS.filter(d=>d.state===state);
+  const perDay = pace==='packed'?3:2;
+  const dayPlan = [];
+  let poolIdx=0;
+  const budgetPerDay = Math.floor(budget/days);
+  for(let day=1; day<=days; day++){
+    const items=[];
+    const startHour=9;
+    for(let i=0;i<perDay;i++){
+      const dest = pool[poolIdx % pool.length]; poolIdx++;
+      const hour = startHour + i*3;
+      items.push({time:`${hour>12?hour-12:hour}:00 ${hour>=12?'PM':'AM'}`, title:dest.name, type:'Sightseeing', cost:dest.price||200, sub:`${dest.category} · ${dest.city}`});
+    }
+    // add meal + transport
+    items.push({time:'1:30 PM', title:'Local lunch stop', type:'Food', cost:Math.round(budgetPerDay*0.12), sub:'Recommended local restaurant'});
+    items.push({time:'7:30 PM', title:'Hotel check-in / rest', type:'Stay', cost:Math.round(budgetPerDay*0.35), sub:'Comfort stay near city centre'});
+    dayPlan.push({day, items});
+  }
+  plannerDraft = {state, days, budget, interest, pace, dayPlan, title:`${days}-Day ${state} Trip`};
+  renderPlannerResult();
+}
+function renderPlannerResult(){
+  const el = document.getElementById('plannerResult');
+  if(!plannerDraft){ el.innerHTML = `<div class="empty-state"><h3>No itinerary yet</h3></div>`; return; }
+  const total = plannerDraft.dayPlan.reduce((s,d)=>s+d.items.reduce((s2,i)=>s2+i.cost,0),0);
+  el.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+        <div><h3 style="font-size:19px;">${plannerDraft.title}</h3><p style="font-size:13px; color:var(--ink-soft);">Estimated total: <b style="color:var(--saffron-deep);">${inr(total)}</b> ${total>plannerDraft.budget?`<span style="color:var(--maroon);">(over budget by ${inr(total-plannerDraft.budget)})</span>`:''}</p></div>
+        <button class="btn btn-teal btn-sm" onclick="saveItinerary()">💾 Save Itinerary</button>
+      </div>
+      ${plannerDraft.dayPlan.map((d,di)=>`
+        <div class="itin-day">
+          <div class="itin-day-head"><h4 style="font-size:15.5px;">Day ${d.day}</h4><span style="font-size:12px; color:var(--ink-soft);">${d.items.length} activities</span></div>
+          ${d.items.map((it,ii)=>`
+            <div class="itin-item">
+              <div class="time">${it.time}</div>
+              <div class="info"><b>${it.title}</b><br><span>${it.sub||it.type} · ${inr(it.cost)}</span></div>
+              <div class="actions">
+                <button title="Move up" onclick="moveItem(${di},${ii},-1)">↑</button>
+                <button title="Move down" onclick="moveItem(${di},${ii},1)">↓</button>
+                <button title="Remove" onclick="removeItem(${di},${ii})">✕</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function moveItem(di, ii, dir){
+  const arr = plannerDraft.dayPlan[di].items;
+  const j = ii+dir;
+  if(j<0 || j>=arr.length) return;
+  [arr[ii],arr[j]]=[arr[j],arr[ii]];
+  renderPlannerResult();
+}
+function removeItem(di, ii){ plannerDraft.dayPlan[di].items.splice(ii,1); renderPlannerResult(); toast('Activity removed'); }
+function saveItinerary(){
+  DB.itineraries.push({id:uid('it'), email:currentUser.email, title:plannerDraft.title, data:JSON.parse(JSON.stringify(plannerDraft)), savedAt:Date.now()});
+  saveDB(); toast('Itinerary saved!','success'); renderPlanner();
+}
+function loadItinerary(id){
+  const it = DB.itineraries.find(x=>x.id===id);
+  plannerDraft = it.data; renderPlannerResult();
+}
+function addToPlannerFromDest(destId){
+  goPage('planner');
+  toast("Set your trip preferences, then generate — this destination's state is pre-selected.");
+  const d = DESTINATIONS.find(x=>x.id===destId);
+  setTimeout(()=>{ const sel=document.getElementById('pState'); if(sel) sel.value=d.state; },50);
+}
+
+/* ================= TOURIST: MOVESMART ================= */
+function renderMoveSmart(){
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>MoveSmart</h2><p class="desc">Compare transport options for your next hop.</p></div></div>
+    <div class="card" style="padding:20px; max-width:560px; margin-bottom:22px;">
+      <div class="grid g-2">
+        <div class="field"><label>From</label><input type="text" id="msFrom" placeholder="e.g. Hawa Mahal" value="Hawa Mahal"></div>
+        <div class="field"><label>To</label><input type="text" id="msTo" placeholder="e.g. Amber Fort" value="Amber Fort"></div>
+      </div>
+      <div class="field"><label>Approx. distance (km)</label><input type="number" id="msDist" value="11"></div>
+      <button class="btn btn-primary" onclick="renderMoveSmartResults()">Compare Options</button>
+    </div>
+    <div id="msResults"></div>
+  `;
+  renderMoveSmartResults();
+}
+function renderMoveSmartResults(){
+  const dist = parseFloat(document.getElementById('msDist')?.value) || 11;
+  const results = TRANSPORT_TEMPLATES.map(t=>{
+    const time = Math.round((dist/t.speedKmh)*60);
+    const cost = Math.round(t.base + t.perKm*dist);
+    return {...t, time, cost};
+  });
+  const best = results.reduce((a,b)=> (b.cost + b.time*2) < (a.cost + a.time*2) ? b : a);
+  const el = document.getElementById('msResults');
+  el.innerHTML = results.map(r=>`
+    <div class="transport-row ${r.mode===best.mode?'best':''}">
+      <div class="ic">${r.icon}</div>
+      <div class="mid">
+        <b style="display:block; font-size:15px;">${r.mode}</b>
+        ${r.mode===best.mode? '<span class="pill pill-green">Recommended</span>':''}
+      </div>
+      <div class="stats">
+        <div><b>${inr(r.cost)}</b>Est. cost</div>
+        <div><b>${r.time} min</b>Travel time</div>
+        <div><b>${dist} km</b>Distance</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ================= TOURIST: CULTURAL EXPERIENCES ================= */
+function renderCultural(){
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>What's Happening Near You?</h2><p class="desc">Heritage walks, cooking classes, workshops and folk performances.</p></div></div>
+    <div class="grid g-3">
+      ${CULTURAL_EXPERIENCES.map(c=>`
+        <div class="card dest-card">
+          <div class="img" style="background-image:url('${c.img}')"><span class="tag">${c.duration}</span></div>
+          <div class="body">
+            <h4>${c.title}</h4>
+            <div class="loc">📍 ${c.city}, ${c.state}</div>
+            <p style="font-size:13px; color:var(--ink-soft); margin:8px 0;">${c.desc}</p>
+            <div class="foot"><span class="price">${inr(c.price)}/person</span>
+              <button class="btn btn-primary btn-sm" onclick="bookCultural('${c.id}')">Book Now</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function bookCultural(id){
+  const c = CULTURAL_EXPERIENCES.find(x=>x.id===id);
+  const vendor = DB.vendors.find(v=>v.id===c.vendor);
+  DB.bookings.push({id:uid('bk'), touristEmail:currentUser.email, touristName:currentUser.name, vendorId:c.vendor, vendorName:vendor?vendor.name:'SafarSaathi Partner', type:'Cultural Experience', item:c.title, date:new Date(Date.now()+86400000*4).toISOString().slice(0,10), amount:c.price, status:'Pending', createdAt:Date.now()});
+  notify(currentUser.email, `Booking request sent for "${c.title}". You'll be notified once confirmed.`);
+  saveDB();
+  toast('Booked: '+c.title,'success');
+}
+
+/* ================= TOURIST: SAFARDIARY ================= */
+function renderDiary(){
+  const root = document.getElementById('pageRoot');
+  const trips = DB.diaryTrips.filter(t=>t.email===currentUser.email).sort((a,b)=>b.createdAt-a.createdAt);
+  root.innerHTML = `
+    <div class="page-head">
+      <div><h2>SafarDiary</h2><p class="desc">Your travel memories, timeline and photo gallery.</p></div>
+      <button class="btn btn-primary" onclick="newDiaryTrip()">+ New Trip</button>
+    </div>
+    <div id="diaryList">
+      ${trips.length===0? `<div class="empty-state"><h3>No trips yet</h3><p>Start documenting your journeys — create your first trip entry.</p></div>` :
+        trips.map(t=>`
+        <div class="card diary-trip" style="padding:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+            <div><h3 style="font-size:17px;">${t.title}</h3><p style="font-size:12.5px; color:var(--ink-soft);">📍 ${t.place} · ${fmtDate(t.date)}</p></div>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('upload-${t.id}').click()">📷 Add Photo</button>
+            <input type="file" id="upload-${t.id}" accept="image/*" class="hidden" onchange="addDiaryPhoto('${t.id}', this)">
+          </div>
+          <p style="font-size:13.5px; margin-top:10px; color:var(--ink-soft);">${t.notes||'No notes added yet.'}</p>
+          <div class="diary-photos">${(t.photos||[]).map(p=>`<img src="${p}">`).join('')}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function newDiaryTrip(){
+  const overlay = document.createElement('div');
+  overlay.className='modal-overlay'; overlay.id='diaryModal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:460px;">
+      <div class="modal-header"><h3>New Trip Entry</h3><button class="modal-close" onclick="closeModal('diaryModal')">×</button></div>
+      <div class="modal-body">
+        <div class="field"><label>Trip title</label><input type="text" id="dtTitle" placeholder="e.g. Rajasthan Road Trip"></div>
+        <div class="field"><label>Place visited</label><input type="text" id="dtPlace" placeholder="e.g. Jaipur, Rajasthan"></div>
+        <div class="field"><label>Date</label><input type="date" id="dtDate"></div>
+        <div class="field"><label>Notes</label><textarea id="dtNotes" rows="3" placeholder="What made this trip memorable?"></textarea></div>
+        <div class="field"><label>Cover photo (optional)</label>
+          <div class="upload-drop" onclick="document.getElementById('dtPhoto').click()">Click to upload a photo</div>
+          <input type="file" id="dtPhoto" accept="image/*" class="hidden">
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="saveDiaryTrip()">Save Trip</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+function saveDiaryTrip(){
+  const title = document.getElementById('dtTitle').value.trim() || 'Untitled Trip';
+  const place = document.getElementById('dtPlace').value.trim() || 'Unknown';
+  const date = document.getElementById('dtDate').value || new Date().toISOString().slice(0,10);
+  const notes = document.getElementById('dtNotes').value.trim();
+  const fileInput = document.getElementById('dtPhoto');
+  const finish = (photos)=>{
+    DB.diaryTrips.push({id:uid('dt'), email:currentUser.email, title, place, date, notes, photos, createdAt:Date.now()});
+    saveDB(); closeModal('diaryModal'); renderDiary(); toast('Trip added to your diary!','success');
+  };
+  if(fileInput.files && fileInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = e => finish([e.target.result]);
+    reader.readAsDataURL(fileInput.files[0]);
+  } else finish([]);
+}
+function addDiaryPhoto(tripId, input){
+  if(!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const trip = DB.diaryTrips.find(t=>t.id===tripId);
+    trip.photos = trip.photos||[]; trip.photos.push(e.target.result);
+    saveDB(); renderDiary(); toast('Photo added!','success');
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+/* ================= TOURIST: SAFETY & SAFARSHIELD ================= */
+function renderSafety(){
+  const s = DB.safety[currentUser.email] || {contacts:[],logs:[],checkins:[]};
+  const battery = Math.floor(30+Math.random()*65);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>SafarShield</h2><p class="desc">Stay protected with real-time alerts, emergency tools and trusted contacts.</p></div></div>
+    <div class="safety-grid">
+      <div>
+        <div class="card" style="padding:18px; margin-bottom:18px; border-left:5px solid var(--gold);">
+          <b style="font-size:14px;">⚠ Weather & Travel Alert</b>
+          <p style="font-size:13.5px; color:var(--ink-soft); margin-top:6px;">Heavy rainfall expected in your saved destinations over the next 48 hours. Carry rain protection and check road conditions before travelling to hill routes.</p>
+        </div>
+        <div class="card" style="padding:20px; margin-bottom:18px;">
+          <h4 style="font-size:15px; margin-bottom:12px;">Emergency Assistance</h4>
+          <button class="sos-btn" onclick="triggerSOS()">🚨 SOS — Alert Trusted Contacts & Nearby Police</button>
+          <div class="grid g-3" style="margin-top:14px;">
+            <button class="btn btn-outline btn-sm" onclick="logSafety('Called Police helpline (100)')">👮 Police (100)</button>
+            <button class="btn btn-outline btn-sm" onclick="logSafety('Called Tourist helpline (1363)')">📞 Tourist Helpline</button>
+            <button class="btn btn-outline btn-sm" onclick="logSafety('Called Ambulance (108)')">🚑 Ambulance (108)</button>
+          </div>
+        </div>
+        <div class="card" style="padding:20px; margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="font-size:15px;">Trusted Contacts</h4>
+            <button class="btn btn-ghost btn-sm" onclick="addTrustedContact()">+ Add</button>
+          </div>
+          ${s.contacts.map((c,i)=>`<div class="contact-row"><span>${c.name} — ${c.phone}</span><button class="btn btn-ghost btn-sm" onclick="shareLocationWith('${c.name}')">📍 Share location</button></div>`).join('') || '<p style="font-size:13px; color:var(--ink-soft);">No contacts added.</p>'}
+        </div>
+        <div class="card" style="padding:20px;">
+          <h4 style="font-size:15px; margin-bottom:10px;">Activity Log</h4>
+          <div id="safetyLog">${renderSafetyLogRows(s)}</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="padding:20px; margin-bottom:18px;">
+          <h4 style="font-size:15px;">Device Battery</h4>
+          <p style="font-size:26px; font-family:'Fraunces',serif; margin-top:6px;">${battery}%</p>
+          <div class="battery-bar"><div style="width:${battery}%; background:${battery<20?'var(--maroon)':'var(--green)'}"></div></div>
+          <p style="font-size:12px; color:var(--ink-soft); margin-top:6px;">${battery<20?'Low battery — consider checking in before it runs out.':'Battery healthy.'}</p>
+        </div>
+        <div class="card" style="padding:20px;">
+          <h4 style="font-size:15px; margin-bottom:10px;">Safety Check-in</h4>
+          <p style="font-size:13px; color:var(--ink-soft); margin-bottom:12px;">Let your contacts know you're safe.</p>
+          <div style="display:flex; gap:10px;">
+  <button class="btn btn-teal" style="flex:1;" onclick="doCheckin()">I'm Safe</button>
+  <button class="btn btn-danger" style="flex:1;" onclick="needHelp()">Need Help</button>
+</div>
+          <div style="margin-top:14px;">
+            ${s.checkins.slice(0,4).map(c=>`<div class="log-row"><span class="t">${fmtTime(c)}</span><span>Checked in safe</span></div>`).join('') || '<p style="font-size:12.5px; color:var(--ink-soft);">No check-ins yet.</p>'}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderSafetyLogRows(s){
+  return (s.logs.slice(0,8).map(l=>`<div class="log-row"><span class="t">${fmtTime(l.t)}</span><span>${l.text}</span></div>`).join('')) || '<p style="font-size:12.5px; color:var(--ink-soft);">No activity yet.</p>';
+}
+function logSafety(text){
+  const s = DB.safety[currentUser.email]; s.logs.unshift({t:Date.now(), text}); saveDB();
+  toast(text+' — logged.','success');
+  document.getElementById('safetyLog').innerHTML = renderSafetyLogRows(s);
+}
+function triggerSOS(){
+  const s = DB.safety[currentUser.email];
+  s.logs.unshift({t:Date.now(), text:'🚨 SOS triggered — trusted contacts & nearby police alerted'});
+  saveDB();
+  toast('SOS sent! Trusted contacts and nearby police have been alerted.','error');
+  document.getElementById('safetyLog').innerHTML = renderSafetyLogRows(s);
+}
+function doCheckin(){
+  const s = DB.safety[currentUser.email]; s.checkins.unshift(Date.now()); s.logs.unshift({t:Date.now(), text:'Safety check-in completed'}); saveDB();
+  toast("Checked in — your contacts can see you're safe.",'success'); renderSafety();
+}
+function needHelp(){
+  const s = DB.safety[currentUser.email];
+  s.logs.unshift({t:Date.now(), text:'🆘 Help requested — trusted contacts alerted'});
+  saveDB();
+  toast('Help request sent! Your trusted contacts have been alerted.','error');
+  renderSafety();
+}
+function addTrustedContact(){
+  const name = prompt('Contact name:'); if(!name) return;
+  const phone = prompt('Contact phone number:') || 'Not provided';
+  DB.safety[currentUser.email].contacts.push({name, phone}); saveDB(); toast('Trusted contact added','success'); renderSafety();
+}
+function shareLocationWith(name){
+  logSafety('Live location shared with '+name);
+}
+/* ================= TOURIST: TRAVEL ASSIST ================= */
+function renderTravelAssist(){
+  const root = document.getElementById('pageRoot');
+
+  root.innerHTML = `
+    <div class="page-head">
+      <div>
+        <h2>Travel Assist</h2>
+        <p class="desc">
+          Important emergency contacts, tourist helplines and embassy guidance in one place.
+        </p>
+      </div>
+    </div>
+
+    <!-- Emergency Helplines -->
+    <div class="card" style="padding:20px; margin-bottom:20px;">
+      <h4 style="font-size:16px; margin-bottom:6px;">📞 Important Helpline Numbers</h4>
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">
+        Tap a number to call the relevant service.
+      </p>
+
+      <div class="grid g-3">
+
+        <div class="card" style="padding:16px; border-left:4px solid var(--maroon);">
+          <div style="font-size:25px;">🚨</div>
+          <b>National Emergency</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Police, medical or other emergencies
+          </p>
+          <a href="tel:112" class="btn btn-danger btn-sm">Call 112</a>
+        </div>
+
+        <div class="card" style="padding:16px; border-left:4px solid var(--teal);">
+          <div style="font-size:25px;">📞</div>
+          <b>Tourist Helpline</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Tourist assistance
+          </p>
+          <a href="tel:1363" class="btn btn-teal btn-sm">Call 1363</a>
+        </div>
+
+        <div class="card" style="padding:16px; border-left:4px solid var(--gold);">
+          <div style="font-size:25px;">👮</div>
+          <b>Police</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Police assistance
+          </p>
+          <a href="tel:100" class="btn btn-outline btn-sm">Call 100</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">🚑</div>
+          <b>Ambulance</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Medical emergency
+          </p>
+          <a href="tel:102" class="btn btn-outline btn-sm">Call 102</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">🔥</div>
+          <b>Fire</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Fire emergency
+          </p>
+          <a href="tel:101" class="btn btn-outline btn-sm">Call 101</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">🛣️</div>
+          <b>Road Accident</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Road accident assistance
+          </p>
+          <a href="tel:1073" class="btn btn-outline btn-sm">Call 1073</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">🌪️</div>
+          <b>Disaster Management</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Natural or other disasters
+          </p>
+          <a href="tel:108" class="btn btn-outline btn-sm">Call 108</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">👩</div>
+          <b>Women in Distress</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Assistance for women in distress
+          </p>
+          <a href="tel:1091" class="btn btn-outline btn-sm">Call 1091</a>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <div style="font-size:25px;">🚆</div>
+          <b>Railway Security</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin:5px 0 10px;">
+            Railway security assistance
+          </p>
+          <a href="tel:1322" class="btn btn-outline btn-sm">Call 1322</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Embassy Guidance -->
+    <div class="card" style="padding:20px; margin-bottom:20px;">
+      <h4 style="font-size:16px; margin-bottom:6px;">🏛️ Embassy & Consular Assistance</h4>
+
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">
+        If you are travelling internationally, your country's embassy or consulate can
+        provide consular assistance during serious problems.
+      </p>
+
+      <div class="grid g-2">
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>🛂 Keep your passport safe</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Keep your passport, visa and important travel documents secure.
+            Keep digital copies separately.
+          </p>
+        </div>
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>📍 Know your embassy</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Save the address and emergency contact number of your country's
+            embassy or nearest consulate before travelling.
+          </p>
+        </div>
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>🪪 Lost passport</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Report the loss to local authorities and contact your embassy or
+            consulate for guidance on replacement travel documents.
+          </p>
+        </div>
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>⚖️ Follow local laws</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Embassy assistance does not replace local legal procedures.
+            Always follow the laws and regulations of the country you are visiting.
+          </p>
+        </div>
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>🏥 Medical emergency abroad</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Contact local emergency services first when immediate medical
+            assistance is required, then inform your embassy when appropriate.
+          </p>
+        </div>
+
+        <div style="padding:15px; background:#FAF5EE; border-radius:10px;">
+          <b>📱 Save emergency contacts</b>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Save your embassy, accommodation, trusted contact and local emergency
+            numbers before starting your journey.
+          </p>
+        </div>
+
+      </div>
+
+      <div style="margin-top:16px; padding:14px; background:#E3EEED; border-radius:10px;">
+        <b>🌐 Official Indian Consular Services</b>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:5px;">
+          Indian citizens travelling abroad can use official Ministry of External
+          Affairs consular services and find information about Indian Missions abroad.
+        </p>
+        <a href="https://indianconsularservices.mea.gov.in/"
+           target="_blank"
+           class="btn btn-teal btn-sm"
+           style="margin-top:10px;">
+          Open Consular Services →
+        </a>
+      </div>
+    </div>
+
+    <!-- Travel Checklist -->
+    <div class="card" style="padding:20px;">
+      <h4 style="font-size:16px; margin-bottom:12px;">✅ Before You Travel</h4>
+
+      <div style="display:grid; gap:9px;">
+        <div>☑ Save emergency numbers</div>
+        <div>☑ Save your embassy/consulate contact</div>
+        <div>☑ Keep passport and visa details accessible</div>
+        <div>☑ Share your itinerary with a trusted person</div>
+        <div>☑ Save accommodation details</div>
+        <div>☑ Check local laws and travel advisories</div>
+        <div>☑ Keep important documents backed up securely</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ================= TOURIST: REPORTS ================= */
+const REPORT_CATEGORIES = ['Overcharging','Fake Ticket','Unsafe Vendor','Harassment','Fraud/Scam','Other'];
+function renderReports(){
+  const mine = DB.reports.filter(r=>r.touristEmail===currentUser.email).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Report an Issue</h2><p class="desc">Report scams, overcharging or unsafe vendors — we route this to Tourism Authorities.</p></div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr; align-items:start;">
+      <div class="card" style="padding:20px;">
+        <div class="field"><label>Category</label><select id="rpCategory">${REPORT_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <div class="field"><label>Location</label><input type="text" id="rpLocation" placeholder="e.g. Amber Fort, Jaipur"></div>
+        <div class="field"><label>Description</label><textarea id="rpDesc" rows="4" placeholder="Describe what happened in detail..."></textarea></div>
+        <div class="field"><label>Evidence (optional)</label>
+          <div class="upload-drop" onclick="document.getElementById('rpEvidence').click()" id="rpEvidenceLabel">Click to upload photo evidence</div>
+          <input type="file" id="rpEvidence" accept="image/*" class="hidden" onchange="document.getElementById('rpEvidenceLabel').textContent='✓ '+this.files[0].name">
+        </div>
+        <button class="btn btn-danger" style="width:100%;" onclick="submitReport()">Submit Report</button>
+      </div>
+      <div>
+        <h4 style="font-size:14px; margin-bottom:12px; color:var(--ink-soft);">YOUR REPORTS</h4>
+        <div id="myReportsList">
+          ${mine.length===0? `<div class="empty-state"><h3>No reports yet</h3></div>` : mine.map(r=>`
+            <div class="report-row">
+              <div>
+                <b style="font-size:14px;">${r.category}</b> — <span style="font-size:13px; color:var(--ink-soft);">${r.location}</span>
+                <p style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;">${r.description}</p>
+                ${r.insight? `<p style="font-size:12px; color:var(--teal); margin-top:6px;">🔎 AI Insight: ${r.insight}</p>`:''}
+              </div>
+              <span class="status-tag status-${r.status}">${r.status.replace('_',' ')}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+function submitReport(){
+  const category = document.getElementById('rpCategory').value;
+  const location = document.getElementById('rpLocation').value.trim();
+  const description = document.getElementById('rpDesc').value.trim();
+  const evidence = document.getElementById('rpEvidence').files.length>0;
+  if(!location || !description){ toast('Please fill in location and description','error'); return; }
+  const insights = [
+    'Similar reports detected nearby in the last 30 days — pattern flagged for authority review.',
+    'This appears to be an isolated incident based on current data.',
+    'Matches a known scam pattern reported at this location previously.',
+  ];
+  const rep = {id:uid('rp'), touristEmail:currentUser.email, touristName:currentUser.name, category, location, description, status:'Submitted', date:new Date().toISOString().slice(0,10), evidence, insight: insights[Math.floor(Math.random()*insights.length)]};
+  DB.reports.unshift(rep);
+  saveDB();
+  toast('Report submitted — you can track its status here.','success');
+  renderReports();
+}
+
+/* ================= TOURIST: BOOKINGS / FAVORITES / NOTIFICATIONS ================= */
+function renderTouristBookings(){
+  const mine = DB.bookings.filter(b=>b.touristEmail===currentUser.email).sort((a,b)=>b.createdAt-a.createdAt);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>My Bookings</h2><p class="desc">Hotels, guides, cultural experiences and guided visits.</p></div></div>
+    ${mine.length===0? `<div class="empty-state"><h3>No bookings yet</h3><p>Explore destinations or cultural experiences to make your first booking.</p></div>` :
+    mine.map(b=>`
+      <div class="report-row">
+        <div><b style="font-size:14.5px;">${b.item}</b><p style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;">${b.type} · with ${b.vendorName} · ${fmtDate(b.date)}</p></div>
+        <div style="display:flex; align-items:center; gap:12px;"><b style="color:var(--saffron-deep);">${inr(b.amount)}</b><span class="status-tag status-${b.status==='Confirmed'?'Resolved':b.status==='Pending'?'Submitted':'Escalated'}">${b.status}</span></div>
+      </div>
+    `).join('')}
+  `;
+}
+function renderFavorites(){
+  const favIds = DB.favorites[currentUser.email]||[];
+  const favs = DESTINATIONS.filter(d=>favIds.includes(d.id));
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Favorites</h2><p class="desc">Destinations you've saved for later.</p></div></div>
+    <div class="grid g-4" id="favGrid">
+      ${favs.length===0? `<div class="empty-state" style="grid-column:1/-1;"><h3>No favorites yet</h3><p>Tap the heart on any destination to save it here.</p></div>` :
+      favs.map(d=>`
+        <div class="card dest-card" onclick="openDestination('${d.id}')">
+          <div class="img" style="background-image:url('${d.img}')">
+            <button class="save-btn" onclick="event.stopPropagation(); toggleFavorite('${d.id}')">❤️</button>
+            <span class="rating">★ ${d.rating}</span>
+          </div>
+          <div class="body"><h4>${d.name}</h4><div class="loc">📍 ${d.city}, ${d.state}</div></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function renderAlerts(){
+  const root = document.getElementById('pageRoot');
+
+  root.innerHTML = `
+    <div class="page-head">
+      <div>
+        <h2>🚨 Alerts</h2>
+        <p class="desc">Important safety and travel alerts for your destination.</p>
+      </div>
+    </div>
+
+    <div class="grid g-2">
+
+      <div class="card" style="padding:20px; border-left:5px solid #E8590C;">
+        <div style="font-size:28px; margin-bottom:8px;">🌧️</div>
+        <h3 style="font-size:19px;">Weather Alert</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:7px;">
+          Heavy rainfall expected in the destination area.
+        </p>
+        <span class="pill pill-gold" style="margin-top:12px;">
+          ⚠️ Moderate Risk
+        </span>
+      </div>
+
+      <div class="card" style="padding:20px; border-left:5px solid var(--maroon);">
+        <div style="font-size:28px; margin-bottom:8px;">⛰️</div>
+        <h3 style="font-size:19px;">Landslide Alert</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:7px;">
+          Landslide-prone routes may experience temporary closures.
+        </p>
+        <span class="pill pill-red" style="margin-top:12px;">
+          🔴 High Risk
+        </span>
+      </div>
+
+      <div class="card" style="padding:20px; border-left:5px solid #B8860B;">
+        <div style="font-size:28px; margin-bottom:8px;">🌊</div>
+        <h3 style="font-size:19px;">Flood Alert</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:7px;">
+          Water levels may rise in low-lying areas. Avoid affected routes.
+        </p>
+        <span class="pill pill-gold" style="margin-top:12px;">
+          ⚠️ Moderate Risk
+        </span>
+      </div>
+
+      <div class="card" style="padding:20px; border-left:5px solid var(--maroon);">
+        <div style="font-size:28px; margin-bottom:8px;">🚧</div>
+        <h3 style="font-size:19px;">Road Closure</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:7px;">
+          A major tourist route may be temporarily closed. Check alternate routes.
+        </p>
+        <span class="pill pill-red" style="margin-top:12px;">
+          🔴 Important
+        </span>
+      </div>
+
+      
+
+     
+
+    </div>
+  `;
+}
+function renderNotifications(){
+  const list = DB.notifications[currentUser.email]||[];
+  list.forEach(n=>n.read=true); saveDB(); refreshNotifDot();
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Notifications</h2></div></div>
+    ${list.length===0? `<div class="empty-state"><h3>You're all caught up</h3></div>` :
+    list.map(n=>`<div class="report-row"><div>${n.text}</div><span style="font-size:12px; color:var(--ink-soft);">${fmtDate(n.date)}</span></div>`).join('')}
+  `;
+}
+
+/* ================= VENDOR: DASHBOARD ================= */
+function renderVendorDashboard(){
+  const v = myVendor();
+  const bookings = DB.bookings.filter(b=>b.vendorId===v.id);
+  const reviews = DB.reviews.filter(r=>r.vendorId===v.id);
+  const complaints = DB.reports.filter(r=>r.description.toLowerCase().includes(v.name.toLowerCase().split(' ')[0].toLowerCase())); // loose demo link
+  const avgRating = reviews.length? (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1) : '—';
+  const revenue = bookings.filter(b=>b.status!=='Cancelled').reduce((s,b)=>s+b.amount,0);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Welcome back, ${v.name}</h2><p class="desc">Here's how your business is performing on SafarSaathi.</p></div>
+      <div>${v.verified?'<span class="badge-verified">✔ Verified</span>':''} ${v.recommended?'<span class="badge-rec">★ Recommended</span>':''}</div>
+    </div>
+    <div class="grid g-4" style="margin-bottom:22px;">
+      <div class="card stat-card"><div class="num">${bookings.length}</div><div class="lbl">TOTAL BOOKINGS</div><div class="delta up">▲ 12% this month</div></div>
+      <div class="card stat-card"><div class="num">${inr(revenue)}</div><div class="lbl">REVENUE (est.)</div><div class="delta up">▲ 8% this month</div></div>
+      <div class="card stat-card"><div class="num">${avgRating} ★</div><div class="lbl">AVG. RATING (${reviews.length} reviews)</div></div>
+      <div class="card stat-card"><div class="num">${v.trust}</div><div class="lbl">TRUST SCORE</div><div class="delta ${v.trust>=75?'up':'down'}">${v.trust>=75?'▲ Healthy':'▼ Needs attention'}</div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1.4fr 1fr;">
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:6px;">Recent Bookings & Enquiries</h4>
+        ${bookings.length===0? `<div class="empty-state"><h3>No bookings yet</h3><p>Complete your profile to start receiving bookings.</p></div>` :
+          bookings.slice(0,5).map(b=>`<div class="report-row"><div><b style="font-size:14px;">${b.item}</b><p style="font-size:12px; color:var(--ink-soft);">${b.touristName} · ${fmtDate(b.date)}</p></div><span class="status-tag status-${b.status==='Confirmed'?'Resolved':'Submitted'}">${b.status}</span></div>`).join('')}
+      </div>
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:14px;">Trust Score Trend</h4>
+        ${trustSparkline(v.id)}
+        <p style="font-size:12px; color:var(--ink-soft); margin-top:8px;">Based on reviews, complaint resolution and verification status.</p>
+      </div>
+    </div>
+  `;
+}
+function trustSparkline(vid){
+  const hist = DB.trustHistory[vid] || [{m:'Apr',s:60},{m:'May',s:62},{m:'Jun',s:65},{m:'Jul',s:68},{m:'Aug',s:70}];
+  const max=100, min=40;
+  const pts = hist.map((h,i)=> `${(i/(hist.length-1))*260},${120-((h.s-min)/(max-min))*100}`).join(' ');
+  return `<svg class="svg-line-wrap" viewBox="0 0 260 130" height="130">
+    <polyline points="${pts}" fill="none" stroke="#E8590C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    ${hist.map((h,i)=>`<circle cx="${(i/(hist.length-1))*260}" cy="${120-((h.s-min)/(max-min))*100}" r="4" fill="#B9450A"/>`).join('')}
+    ${hist.map((h,i)=>`<text x="${(i/(hist.length-1))*260}" y="128" font-size="10" fill="#5C4F45" text-anchor="middle">${h.m}</text>`).join('')}
+  </svg>`;
+}
+
+/* ================= VENDOR: PROFILE ================= */
+function renderVendorProfile(){
+  const v = myVendor();
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Business Profile</h2><p class="desc">Keep your listing accurate and appealing to tourists.</p></div></div>
+    <div class="grid" style="grid-template-columns:1fr 1.4fr;">
+      <div class="card" style="padding:16px;">
+        <div style="height:180px; border-radius:10px; background-image:url('${v.img}'); background-size:cover; background-position:center; margin-bottom:12px;"></div>
+        <button class="btn btn-ghost btn-sm" style="width:100%;" onclick="document.getElementById('vImgUpload').click()">📷 Change Cover Photo</button>
+        <input type="file" id="vImgUpload" accept="image/*" class="hidden" onchange="changeVendorImage(this)">
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+          ${v.verified?'<span class="badge-verified">✔ Verified</span>':'<span class="pill pill-red">Not yet verified</span>'}
+          ${v.recommended?'<span class="badge-rec">★ Recommended</span>':''}
+        </div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div class="field"><label>Business name</label><input type="text" id="vName" value="${v.name}"></div>
+        <div class="grid g-2">
+          <div class="field"><label>Type</label><select id="vType"><option ${v.type==='Hotel'?'selected':''}>Hotel</option><option ${v.type==='Homestay'?'selected':''}>Homestay</option><option ${v.type==='Café'?'selected':''}>Café</option><option ${v.type==='Restaurant'?'selected':''}>Restaurant</option><option ${v.type==='Travel Agency'?'selected':''}>Travel Agency</option><option ${v.type==='Guide'?'selected':''}>Guide</option><option ${v.type==='Resort'?'selected':''}>Resort</option><option ${v.type==='Photographer'?'selected':''}>Photographer</option><option ${v.type==='Handicraft Workshop'?'selected':''}>Handicraft Workshop</option></select></div>
+          <div class="field"><label>State</label><select id="vState">${STATES.map(s=>`<option ${v.state===s?'selected':''}>${s}</option>`).join('')}</select></div>
+        </div>
+        <div class="field"><label>City</label><input type="text" id="vCity" value="${v.city}"></div>
+        <div class="field"><label>Description</label><textarea id="vDesc" rows="3">${v.desc}</textarea></div>
+        <div class="field"><label>Price range</label><input type="text" id="vPrice" value="${v.priceRange}"></div>
+        <button class="btn btn-primary" onclick="saveVendorProfile()">Save Changes</button>
+        ${!v.verified? `<button class="btn btn-outline" style="margin-left:8px;" onclick="requestVerification()">Request Verification</button>`:''}
+      </div>
+    </div>
+  `;
+}
+function changeVendorImage(input){
+  if(!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e=>{ myVendor().img = e.target.result; saveDB(); renderVendorProfile(); toast('Cover photo updated','success'); };
+  reader.readAsDataURL(input.files[0]);
+}
+function saveVendorProfile(){
+  const v = myVendor();
+  v.name=document.getElementById('vName').value.trim()||v.name;
+  v.type=document.getElementById('vType').value;
+  v.state=document.getElementById('vState').value;
+  v.city=document.getElementById('vCity').value.trim()||v.city;
+  v.desc=document.getElementById('vDesc').value.trim();
+  v.priceRange=document.getElementById('vPrice').value.trim();
+  saveDB(); toast('Profile updated!','success');
+}
+function requestVerification(){
+  const v = myVendor();
+  notify(currentUser.email, 'Your verification request has been submitted to SafarSaathi Tourism Authority for review.');
+  toast('Verification request submitted — usually reviewed within 3-5 days.','success');
+}
+
+/* ================= VENDOR: SERVICES ================= */
+function renderVendorServices(){
+  const v = myVendor();
+  v.services = v.services || [
+    {id:uid('sv'), name: v.type==='Hotel'||v.type==='Resort'||v.type==='Homestay' ? 'Deluxe Room':'Standard Package', price: 2500, unit: v.type.includes('Hotel')||v.type==='Resort'||v.type==='Homestay' ?'/night':'/person'},
+  ];
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Services & Pricing</h2><p class="desc">Manage what you offer and how it's priced.</p></div>
+      <button class="btn btn-primary" onclick="addService()">+ Add Service</button></div>
+    <div id="serviceList">${v.services.map(s=>`
+      <div class="service-row">
+        <div><b style="font-size:14.5px;">${s.name}</b><p style="font-size:12.5px; color:var(--ink-soft);">${inr(s.price)}${s.unit}</p></div>
+        <div style="display:flex; gap:6px;"><button class="btn btn-ghost btn-sm" onclick="editService('${s.id}')">Edit</button><button class="btn btn-ghost btn-sm" onclick="deleteService('${s.id}')">Remove</button></div>
+      </div>
+    `).join('')}</div>
+  `;
+}
+function addService(){
+  const name = prompt('Service name:'); if(!name) return;
+  const price = parseInt(prompt('Price (₹):','1000'))||1000;
+  myVendor().services.push({id:uid('sv'), name, price, unit:'/unit'});
+  saveDB(); renderVendorServices(); toast('Service added','success');
+}
+function editService(id){
+  const v = myVendor(); const s = v.services.find(x=>x.id===id);
+  const price = parseInt(prompt('New price (₹):', s.price)); if(price) s.price=price;
+  saveDB(); renderVendorServices();
+}
+function deleteService(id){
+  const v = myVendor(); v.services = v.services.filter(x=>x.id!==id); saveDB(); renderVendorServices(); toast('Service removed');
+}
+
+/* ================= VENDOR: BOOKINGS ================= */
+function renderVendorBookings(){
+  const v = myVendor();
+  const bookings = DB.bookings.filter(b=>b.vendorId===v.id).sort((a,b)=>b.createdAt-a.createdAt);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Bookings & Enquiries</h2><p class="desc">Confirm, decline or track tourist bookings in real time.</p></div></div>
+    ${bookings.length===0? `<div class="empty-state"><h3>No bookings yet</h3></div>` :
+    bookings.map(b=>`
+      <div class="report-row">
+        <div><b style="font-size:14.5px;">${b.item}</b><p style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;">${b.touristName} · ${fmtDate(b.date)} · ${inr(b.amount)}</p></div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="status-tag status-${b.status==='Confirmed'?'Resolved':b.status==='Pending'?'Submitted':'Escalated'}">${b.status}</span>
+          ${b.status==='Pending'? `<button class="btn btn-primary btn-sm" onclick="setBookingStatus('${b.id}','Confirmed')">Confirm</button><button class="btn btn-ghost btn-sm" onclick="setBookingStatus('${b.id}','Declined')">Decline</button>`:''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+function setBookingStatus(id, status){
+  const b = DB.bookings.find(x=>x.id===id); b.status=status; saveDB();
+  notify(b.touristEmail, `Your booking "${b.item}" was ${status.toLowerCase()} by ${b.vendorName}.`);
+  toast('Booking '+status.toLowerCase(),'success');
+  renderVendorBookings();
+}
+
+/* ================= VENDOR: REVIEWS ================= */
+function renderVendorReviews(){
+  const v = myVendor();
+  const reviews = DB.reviews.filter(r=>r.vendorId===v.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const relatedComplaints = DB.reports.filter(r=>r.status!=='Resolved' && r.location.toLowerCase().includes(v.city.toLowerCase()));
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Reviews & Complaints</h2></div></div>
+    <div class="grid" style="grid-template-columns:1.3fr 1fr;">
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:10px;">Tourist Reviews</h4>
+        ${reviews.length===0? `<div class="empty-state"><h3>No reviews yet</h3></div>` :
+        reviews.map(r=>`<div class="review-row"><div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><b style="font-size:13.5px;">${r.touristName}</b><p style="font-size:13px; color:var(--ink-soft); margin-top:4px;">${r.text}</p><p style="font-size:11.5px; color:#A8998A; margin-top:4px;">${fmtDate(r.date)}</p></div>`).join('')}
+      </div>
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:10px;">Nearby Complaint Signals</h4>
+        <p style="font-size:12.5px; color:var(--ink-soft); margin-bottom:10px;">Reports filed near your city — monitor for patterns that could affect your trust score.</p>
+        ${relatedComplaints.length===0? '<p style="font-size:13px; color:var(--ink-soft);">No active complaints nearby.</p>' :
+        relatedComplaints.map(c=>`<div class="report-row" style="padding:10px;"><div><b style="font-size:13px;">${c.category}</b><p style="font-size:12px; color:var(--ink-soft);">${c.location}</p></div><span class="status-tag status-${c.status}">${c.status.replace('_',' ')}</span></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+/* ================= VENDOR: ANALYTICS ================= */
+function renderVendorAnalytics(){
+  const v = myVendor();
+  const bookings = DB.bookings.filter(b=>b.vendorId===v.id);
+  const months = ['Apr','May','Jun','Jul','Aug'];
+  const bookingSeries = months.map((m,i)=> 2+Math.round(Math.random()*4)+i );
+  const maxB = Math.max(...bookingSeries);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Analytics & Trust Score</h2></div></div>
+    <div class="grid" style="grid-template-columns:1.3fr 1fr;">
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:6px;">Monthly Bookings</h4>
+        <div class="mini-bar-chart" style="margin-bottom:26px;">
+          ${bookingSeries.map((b,i)=>`<div class="bar" style="height:${(b/maxB)*100}%"><span>${months[i]}</span></div>`).join('')}
+        </div>
+        <h4 style="font-size:15px; margin:20px 0 6px;">Service Performance</h4>
+        ${(v.services||[]).map(s=>`<div style="margin-bottom:10px;"><div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><span>${s.name}</span><span>${Math.round(40+Math.random()*55)}% booked</span></div><div class="battery-bar"><div style="width:${Math.round(40+Math.random()*55)}%; background:var(--saffron);"></div></div></div>`).join('') || '<p style="font-size:13px;color:var(--ink-soft);">Add services to see performance.</p>'}
+      </div>
+      <div class="card" style="padding:20px; text-align:center;">
+        <h4 style="font-size:15px; margin-bottom:14px;">Trust Score</h4>
+        <div class="trust-ring" style="margin:0 auto;">
+          <svg width="110" height="110">
+            <circle cx="55" cy="55" r="46" stroke="#EEE2D2" stroke-width="12" fill="none"/>
+            <circle cx="55" cy="55" r="46" stroke="#E8590C" stroke-width="12" fill="none" stroke-dasharray="${2*Math.PI*46}" stroke-dashoffset="${2*Math.PI*46*(1-v.trust/100)}" stroke-linecap="round"/>
+          </svg>
+          <div class="val">${v.trust}</div>
+        </div>
+        <p style="font-size:12.5px; color:var(--ink-soft); margin-top:14px;">Trust Score reflects reviews, verification status and resolved vs. open complaints.</p>
+        <div style="margin-top:16px; text-align:left;">${trustSparkline(v.id)}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ================= AUTHORITY: OVERVIEW ================= */
+function renderAuthorityOverview(){
+  const totalReports = DB.reports.length;
+  const resolved = DB.reports.filter(r=>r.status==='Resolved').length;
+  const totalBookings = DB.bookings.length;
+  const totalVendors = DB.vendors.length;
+  const footfallByState = STATES.map(s=>({state:s, count: DESTINATIONS.filter(d=>d.state===s).length*120 + Math.round(Math.random()*300)}));
+  const maxF = Math.max(...footfallByState.map(f=>f.count));
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Tourism Authority Overview</h2><p class="desc">Real-time footfall, trends and safety insights across India.</p></div></div>
+    <div class="grid g-4" style="margin-bottom:22px;">
+      <div class="card stat-card"><div class="num">${totalBookings}</div><div class="lbl">ACTIVE BOOKINGS TRACKED</div></div>
+      <div class="card stat-card"><div class="num">${totalReports}</div><div class="lbl">TOTAL REPORTS FILED</div></div>
+      <div class="card stat-card"><div class="num">${resolved}/${totalReports}</div><div class="lbl">CASES RESOLVED</div></div>
+      <div class="card stat-card"><div class="num">${totalVendors}</div><div class="lbl">REGISTERED BUSINESSES</div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1.3fr 1fr;">
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:6px;">Popular Destinations (by rating)</h4>
+        ${DESTINATIONS.slice().sort((a,b)=>b.rating-a.rating).slice(0,6).map(d=>`
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px;">
+            <span>${d.name} <span style="color:var(--ink-soft);">— ${d.city}, ${d.state}</span></span><span class="pill pill-gold">★ ${d.rating}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card" style="padding:20px;">
+        <h4 style="font-size:15px; margin-bottom:12px;">Estimated Footfall by State</h4>
+        ${footfallByState.sort((a,b)=>b.count-a.count).slice(0,7).map(f=>`
+          <div style="margin-bottom:9px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:3px;"><span>${f.state}</span><span>${f.count.toLocaleString('en-IN')}</span></div>
+            <div class="battery-bar"><div style="width:${(f.count/maxF)*100}%; background:var(--teal);"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+/* ================= AUTHORITY: HEATMAP ================= */
+function renderAuthorityHeatmap(){
+  const stateStats = STATES.map(s=>{
+    const reports = DB.reports.filter(r=> DESTINATIONS.find(d=>d.state===s && r.location.includes(d.city)) ).length;
+    const scamScore = Math.min(100, reports*22 + Math.round(Math.random()*20));
+    return {state:s, reports, scamScore};
+  }).sort((a,b)=>b.scamScore-a.scamScore);
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Tourism Heatmap</h2><p class="desc">Complaint hotspots and scam pattern intensity by state.</p></div></div>
+    <div class="grid g-4" style="margin-bottom:22px;">
+      ${stateStats.slice(0,8).map(s=>`
+        <div class="heat-cell-bg" style="background:${heatColor(s.scamScore)}">
+          <div style="font-size:15px;">${s.state}</div>
+          <div style="font-size:22px; font-family:'Fraunces',serif; margin:4px 0;">${s.scamScore}</div>
+          <div style="font-size:11px; opacity:.9;">${s.reports} active reports</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card" style="padding:20px;">
+      <h4 style="font-size:15px; margin-bottom:10px;">Scam Pattern Table</h4>
+      <table class="heat-table">
+        <thead><tr><th>State</th><th>Reports</th><th>Intensity</th></tr></thead>
+        <tbody>
+          ${stateStats.map(s=>`<tr><td>${s.state}</td><td>${s.reports}</td><td><div class="heat-bar" style="width:${s.scamScore}%;"></div></td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+function heatColor(score){
+  if(score>65) return 'linear-gradient(135deg,#8B2635,#5C1622)';
+  if(score>35) return 'linear-gradient(135deg,#E8590C,#B9450A)';
+  return 'linear-gradient(135deg,#2E7D46,#1E5C33)';
+}
+
+/* ================= AUTHORITY: REPORTS & CASES ================= */
+let authorityStatusFilter = '';
+function renderAuthorityReports(){
+  const root = document.getElementById('pageRoot');
+  const list = DB.reports.filter(r=>!authorityStatusFilter || r.status===authorityStatusFilter).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Reports & Cases</h2><p class="desc">Investigate tourist-submitted reports and update case status.</p></div></div>
+    <div class="filter-bar">
+      <select onchange="authorityStatusFilter=this.value; renderAuthorityReports();">
+        <option value="">All Statuses</option>
+        <option value="Submitted" ${authorityStatusFilter==='Submitted'?'selected':''}>Submitted</option>
+        <option value="Under_Review" ${authorityStatusFilter==='Under_Review'?'selected':''}>Under Review</option>
+        <option value="Escalated" ${authorityStatusFilter==='Escalated'?'selected':''}>Escalated</option>
+        <option value="Resolved" ${authorityStatusFilter==='Resolved'?'selected':''}>Resolved</option>
+      </select>
+    </div>
+    ${list.length===0? `<div class="empty-state"><h3>No cases match this filter</h3></div>` :
+    list.map(r=>`
+      <div class="report-row" style="cursor:pointer;" onclick="openCase('${r.id}')">
+        <div><b style="font-size:14.5px;">${r.category}</b> — <span style="font-size:13px; color:var(--ink-soft);">${r.location}</span>
+          <p style="font-size:12px; color:var(--ink-soft); margin-top:3px;">Filed by ${r.touristName} · ${fmtDate(r.date)}</p></div>
+        <span class="status-tag status-${r.status}">${r.status.replace('_',' ')}</span>
+      </div>
+    `).join('')}
+  `;
+}
+function openCase(id){
+  const r = DB.reports.find(x=>x.id===id);
+  const overlay = document.createElement('div');
+  overlay.className='modal-overlay'; overlay.id='caseModal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:560px;">
+      <div class="modal-header"><h3>Case: ${r.category}</h3><button class="modal-close" onclick="closeModal('caseModal')">×</button></div>
+      <div class="modal-body">
+        <div class="case-detail-row"><b>Filed by</b>${r.touristName}</div>
+        <div class="case-detail-row"><b>Location</b>${r.location}</div>
+        <div class="case-detail-row"><b>Date filed</b>${fmtDate(r.date)}</div>
+        <div class="case-detail-row"><b>Evidence</b>${r.evidence?'Photo attached':'None provided'}</div>
+        <div class="case-detail-row"><b>Description</b>${r.description}</div>
+        ${r.insight? `<div class="case-detail-row"><b>AI Insight</b>${r.insight}</div>`:''}
+        <div class="field" style="margin-top:16px;"><label>Update case status</label>
+          <select id="caseStatus">
+            <option value="Submitted" ${r.status==='Submitted'?'selected':''}>Submitted</option>
+            <option value="Under_Review" ${r.status==='Under_Review'?'selected':''}>Under Review</option>
+            <option value="Escalated" ${r.status==='Escalated'?'selected':''}>Escalated</option>
+            <option value="Resolved" ${r.status==='Resolved'?'selected':''}>Resolved</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="updateCaseStatus('${r.id}')">Update Status</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+function updateCaseStatus(id){
+  const status = document.getElementById('caseStatus').value;
+  const r = DB.reports.find(x=>x.id===id); r.status=status; saveDB();
+  notify(r.touristEmail, `Your report on "${r.location}" was updated to: ${status.replace('_',' ')}.`);
+  toast('Case status updated','success');
+  closeModal('caseModal');
+  renderAuthorityReports();
+}
+
+/* ================= AUTHORITY: VENDOR DIRECTORY ================= */
+function renderAuthorityVendors(){
+  const root = document.getElementById('pageRoot');
+  root.innerHTML = `
+    <div class="page-head"><div><h2>Business Directory</h2><p class="desc">Monitor registered tourism businesses and verification status.</p></div></div>
+    <div class="grid g-3">
+      ${DB.vendors.map(v=>`
+        <div class="card" style="padding:16px;">
+          <div style="height:120px; border-radius:9px; background-image:url('${v.img}'); background-size:cover; background-position:center; margin-bottom:10px;"></div>
+          <b style="font-size:14.5px;">${v.name}</b>
+          <p style="font-size:12.5px; color:var(--ink-soft); margin:4px 0;">${v.type} · ${v.city}, ${v.state}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <span class="pill ${v.trust>=75?'pill-green':v.trust>=50?'pill-gold':'pill-red'}">Trust: ${v.trust}</span>
+            ${v.verified? `<button class="btn btn-ghost btn-sm" onclick="toast('Already verified')">✔ Verified</button>` : `<button class="btn btn-teal btn-sm" onclick="verifyVendor('${v.id}')">Verify</button>`}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function verifyVendor(id){
+  const v = DB.vendors.find(x=>x.id===id); v.verified=true; v.trust=Math.min(100,v.trust+8); saveDB();
+  if(v.ownerEmail) notify(v.ownerEmail, 'Congratulations! Your business has been Verified by SafarSaathi Tourism Authority.');
+  toast(v.name+' verified','success');
+  renderAuthorityVendors();
+}
+
+/* ================= GLOBAL SEARCH ================= */
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && document.activeElement && document.activeElement.id==='globalSearch') doGlobalSearch();
+});
+function doGlobalSearch(){
+  const q = document.getElementById('globalSearch').value.trim();
+  if(!q) return;
+  if(currentUser.role==='tourist'){
+    exploreFilters = {state:'',city:'',category:'',q};
+    goPage('explore');
+  } else {
+    toast('Search is available in Explore for tourists. Try the relevant section filters here.');
+  }
+}
+document.getElementById('globalSearch') && document.getElementById('globalSearch').addEventListener('input', function(){});
+
+/* ================= BOOTSTRAP ================= */
+(function init(){
+  if(DB.currentEmail && DB.users[DB.currentEmail]){
+    currentUser = DB.users[DB.currentEmail];
+    enterApp();
+  }
+})();
+</script>
+</body>
+</html>
